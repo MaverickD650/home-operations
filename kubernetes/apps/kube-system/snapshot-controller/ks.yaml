@@ -5,7 +5,7 @@ metadata:
   name: snapshot-controller
 spec:
   interval: 1h
-  path: ./kubernetes/apps/system/snapshot-controller/app
+  path: ./kubernetes/apps/kube-system/snapshot-controller/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
@@ -15,4 +15,4 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: system
+  targetNamespace: kube-system
