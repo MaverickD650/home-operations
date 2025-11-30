@@ -25,7 +25,6 @@ spec:
       # Overprovisioning might be needed when using volsync
       storageOverProvisioningPercentage: "100000"
       storageReservedPercentageForDefaultDisk: "1"
-      defaultDataPath: "/var/mnt/host-nvme"
       v2DataEngine: true
     csi:
       attacherReplicaCount: "1"

@@ -1,0 +1,10 @@
+apiVersion: longhorn.io/v1beta2
+kind: LonghornNode
+metadata:
+  name: node1
+spec:
+  disks:
+    nvme-v2:
+      path: /dev/nvme0n1
+      diskType: block
+      allowScheduling: true
