@@ -3,7 +3,6 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: trim
-  namespace: longhorn-system
 spec:
   concurrency: 1
   cron: 0 15 * * *
