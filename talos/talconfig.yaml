@@ -38,6 +38,13 @@ nodes:
         mtu: 1500
         vip:
           ip: "192.168.50.139"
+    userVolumes:
+      - name: host-nvme
+        provisioning:
+          diskSelector:
+            match: disk.model == "CT2000T500SSD8"  && !system_disk
+          minSize: 1.2TB
+          grow: true
 
 # Global patches
 patches:
@@ -54,3 +61,8 @@ controlPlane:
     - "@./patches/controller/machine-kernal.yaml"
     - "@./patches/controller/machine-features.yaml"
     - "@./patches/controller/machine-kubelet.yaml"
+
+# Worker patches
+worker:
+  patches:
+    - "@./patches/worker/kubelet.yaml"
