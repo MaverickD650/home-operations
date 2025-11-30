@@ -43,7 +43,7 @@ nodes:
         provisioning:
           diskSelector:
             match: disk.model == "CT2000T500SSD8"  && !system_disk
-          minSize: 1.8TB
+          minSize: 1.2TB
           grow: true
 
 # Global patches
