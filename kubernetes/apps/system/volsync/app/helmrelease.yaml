@@ -31,7 +31,7 @@ spec:
                 - --ignore-paths=/metrics
     metrics:
       main:
-        enabled: false
+        enabled: true
         type: servicemonitor
         endpoints:
           - port: metrics
