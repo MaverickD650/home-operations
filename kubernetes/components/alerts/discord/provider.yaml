@@ -5,4 +5,5 @@ metadata:
   name: discord
 spec:
   type: discord
-  address: ${DISCORD_ALERT_WEBHOOK}
+  secretRef:
+    name: discord-webhook
