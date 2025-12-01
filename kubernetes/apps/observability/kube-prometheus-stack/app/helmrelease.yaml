@@ -85,10 +85,16 @@ spec:
       enabled: false
       forceDeployDashboards: true
       operator:
-        dashboardsConfigMapRefEnabled: false
+        dashboardsConfigMapRefEnabled: true
         folder: observability
         matchLabels:
           grafana.internal/instance: grafana
+      datasource:
+        enabled: true
+        default: true
+        httpMethod: POST
+        scrapeInterval: "30s"
+        uid: "prometheus"
     additionalPrometheusRulesMap:
       dockerhub-rules:
         groups:
