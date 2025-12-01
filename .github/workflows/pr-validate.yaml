@@ -61,6 +61,7 @@ jobs:
             --all-namespaces
             --api-versions=monitoring.coreos.com/v1
             --enable-helm
+            --path /github/workspace/kubernetes/flux/cluster
       - name: Undo any changes (if needed)
         run: |
           git checkout -- clusters/main/kubernetes/
@@ -97,7 +98,7 @@ jobs:
       - name: Substitute placeholder
         uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
         with:
-          input: 'pull/clusters/main/kubernetes/**/*.yaml'
+          input: 'pull/kubernetes/apps/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
           substitutionData: '{"S3URL":"https://placeholder.example"}'
           throwOnDataMissing: false
@@ -111,7 +112,7 @@ jobs:
       - name: Substitute placeholder
         uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
         with:
-          input: 'default/clusters/main/kubernetes/**/*.yaml'
+          input: 'default/kubernetes/apps/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
           substitutionData: '{"S3URL":"https://placeholder.example"}'
           throwOnDataMissing: false
@@ -124,12 +125,12 @@ jobs:
           args: >
             diff ${{ matrix.resource }}
             --unified 6
-            --path /github/workspace/pull/
-            --path-orig /github/workspace/default/
+            --path /github/workspace/pull/kubernetes/flux/cluster
+            --path-orig /github/workspace/default/kubernetes/flux/cluster
             --strip-attrs "helm.sh/chart,checksum/config,checksum/redis,checksum/secrets,app.kubernetes.io/version,chart,app"
             --limit-bytes 10000
             --all-namespaces
-            --sources "cluster"
+            --sources "flux-system"
             ${{ matrix.extraArgs }}
             --output-file diff.patch
       - name: Generate Diff
