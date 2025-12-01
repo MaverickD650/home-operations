@@ -25,4 +25,4 @@ spec:
     monitoring:
       podMonitorEnabled: true
       grafanaDashboard:
-        create: ture
+        create: true
