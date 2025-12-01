@@ -5,12 +5,12 @@ name: "Pull Request: Validate"
 on:
   pull_request:
     branches: ["main"]
-    paths: ["clusters/main/kubernetes/**"]
+    paths: ["./kubernetes/**"]
 concurrency:
   group: ${{ github.head_ref }}-pr-validate
   cancel-in-progress: true
 env:
-  KUBERNETES_DIR: ./clusters/main/kubernetes
+  KUBERNETES_DIR: ./kubernetes
 
 jobs:
   kubeconform:
@@ -64,7 +64,7 @@ jobs:
             --path /github/workspace/kubernetes/flux/cluster
       - name: Undo any changes (if needed)
         run: |
-          git checkout -- clusters/main/kubernetes/
+          git checkout -- ./kubernetes
   flux-diff:
     name: Flux Diff
     runs-on: ubuntu-latest
