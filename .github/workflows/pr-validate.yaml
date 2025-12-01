@@ -1,0 +1,174 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Pull Request: Validate"
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths: ["clusters/main/kubernetes/**"]
+concurrency:
+  group: ${{ github.head_ref }}-pr-validate
+  cancel-in-progress: true
+env:
+  KUBERNETES_DIR: ./clusters/main/kubernetes
+
+jobs:
+  kubeconform:
+    name: Kubeconform
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - name: Install arkade
+        uses: alexellis/setup-arkade@b1816384b2260cfd2c023c6798d26075786cfc7f # v3
+      - name: Setup Workflow Tools
+        run: arkade get kubeconform kustomize
+      - name: Run kubeconform
+        shell: bash
+        run: bash ./scripts/kubeconform.sh ${{ env.KUBERNETES_DIR }}
+  flux-test:
+    name: Flux Local - Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+      - name: Checkout
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Substitute placeholder
+        uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
+        with:
+          input: 'clusters/main/kubernetes/**/*.yaml'
+          substitutionRegex: '\$\{(\w+)\}'
+          substitutionData: '{"S3URL":"https://placeholder.example"}'
+          throwOnDataMissing: false
+      - name: Run flux-local test
+        uses: docker://ghcr.io/allenporter/flux-local:v8.0.1@sha256:5c8cb0ff9d26a5260a47e7b3949403d80713d80037b9f0e4c02c5efca3588518
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        with:
+          args: >-
+            test
+            --all-namespaces
+            --api-versions=monitoring.coreos.com/v1
+            --enable-helm
+      - name: Undo any changes (if needed)
+        run: |
+          git checkout -- clusters/main/kubernetes/
+  flux-diff:
+    name: Flux Diff
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      matrix:
+        resource:
+          - helmrelease
+          - kustomization
+        include:
+          - resource: helmrelease
+            extraArgs: "--api-versions=monitoring.coreos.com/v1"
+          - resource: kustomization
+            extraArgs: ""
+      fail-fast: false
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+      - name: Checkout Pull Request
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          path: pull
+          persist-credentials: false
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Substitute placeholder
+        uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
+        with:
+          input: 'pull/clusters/main/kubernetes/**/*.yaml'
+          substitutionRegex: '\$\{(\w+)\}'
+          substitutionData: '{"S3URL":"https://placeholder.example"}'
+          throwOnDataMissing: false
+      - name: Checkout Default Branch
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          ref: "${{ github.event.repository.default_branch }}"
+          path: default
+          persist-credentials: false
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Substitute placeholder
+        uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
+        with:
+          input: 'default/clusters/main/kubernetes/**/*.yaml'
+          substitutionRegex: '\$\{(\w+)\}'
+          substitutionData: '{"S3URL":"https://placeholder.example"}'
+          throwOnDataMissing: false
+
+      - name: Run flux-local diff
+        uses: docker://ghcr.io/allenporter/flux-local:v8.0.1@sha256:5c8cb0ff9d26a5260a47e7b3949403d80713d80037b9f0e4c02c5efca3588518
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        with:
+          args: >
+            diff ${{ matrix.resource }}
+            --unified 6
+            --path /github/workspace/pull/
+            --path-orig /github/workspace/default/
+            --strip-attrs "helm.sh/chart,checksum/config,checksum/redis,checksum/secrets,app.kubernetes.io/version,chart,app"
+            --limit-bytes 10000
+            --all-namespaces
+            --sources "cluster"
+            ${{ matrix.extraArgs }}
+            --output-file diff.patch
+      - name: Generate Diff
+        id: diff
+        run: |-
+          echo 'diff<<EOF' >> $GITHUB_OUTPUT
+          echo '```diff' >> $GITHUB_OUTPUT
+          cat diff.patch >> $GITHUB_OUTPUT
+          echo '```' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      - if: ${{ steps.diff.outputs.diff != '' }}
+        name: Add Comment
+        uses: marocchino/sticky-pull-request-comment@773744901bac0e8cbb5a0dc842800d45e9b2b405 # v2.9.4
+        with:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resource }}
+          message: ${{ steps.diff.outputs.diff }}
+
+  automerge-and-approve:
+    needs:
+      - kubeconform
+      - flux-diff
+      - flux-test
+    permissions:
+      pull-requests: write
+      contents: write
+    name: Automerge and Approve build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+      - name: automerge
+        uses: pascalgn/automerge-action@7961b8b5eec56cc088c140b56d864285eabd3f67 # v0.16.4
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          UPDATE_RETRIES: 12
+          UPDATE_RETRY_SLEEP: 60000
+          MERGE_METHOD: squash
