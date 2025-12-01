@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: tuppr
   interval: 1h
-  path: ./kubernetes/apps/tuppr/upgrades
+  path: ./kubernetes/apps/system/tuppr/upgrades
   prune: true
   sourceRef:
     kind: GitRepository
