@@ -35,36 +35,47 @@ spec:
           containers:
             main:
               env:
-                # Accept TOS required
-                MEND_RNV_ACCEPT_TOS: "Y"
+                - name: MEND_RNV_ACCEPT_TOS
+                  value: "Y"
                 # unregistered public license key
-                MEND_RNV_LICENSE_KEY: eyJsaW1pdCI6IjEwIn0=.30440220457941b71ea8eb345c729031718b692169f0ce2cf020095fd328812f4d7d5bc1022022648d1a29e71d486f89f27bdc8754dfd6df0ddda64a23155000a61a105da2a1
-                MEND_RNV_PLATFORM: github
+                - name: MEND_RNV_LICENSE_KEY
+                  value: eyJsaW1pdCI6IjEwIn0=.30440220457941b71ea8eb345c729031718b692169f0ce2cf020095fd328812f4d7d5bc1022022648d1a29e71d486f89f27bdc8754dfd6df0ddda64a23155000a61a105da2a1
+                - name: MEND_RNV_PLATFORM
+                  value: github
                 # See https://github.com/mend/renovate-ce-ee/blob/main/docs/setup-for-github.md
-                MEND_RNV_GITHUB_APP_ID:
+                - name: MEND_RNV_GITHUB_APP_ID
                   valueFrom:
                     secretKeyRef:
                       name: &secret mend-renovate-secret
                       key: MEND_RNV_GITHUB_APP_ID
-                MEND_RNV_GITHUB_APP_KEY:
+                - name: MEND_RNV_GITHUB_APP_KEY
                   valueFrom:
                     secretKeyRef:
                       name: *secret
                       key: MEND_RNV_GITHUB_APP_KEY
-                MEND_RNV_WEBHOOK_SECRET:
+                - name: MEND_RNV_WEBHOOK_SECRET
                   valueFrom:
                     secretKeyRef:
                       name: *secret
                       key: MEND_RNV_WEBHOOK_SECRET
-                MEND_RNV_SERVER_PORT: "{{ .Values.service.main.ports.main.port }}"
-                MEND_RNV_AUTODISCOVER_FILTER: "maverickd650/home-operations"
-                MEND_RNV_DATA_HANDLER_TYPE: postgresql
-                PGDATABASE: "{{ .Values.cnpg.main.database }}"
-                PGUSER: "{{ .Values.cnpg.main.user }}"
-                PGPASSWORD: "{{ .Values.cnpg.main.creds.password }}"
-                PGHOST: "{{ .Values.cnpg.main.creds.host }}"
-                PGPORT: "5432"
-                LOG_LEVEL: debug
+                - name: MEND_RNV_SERVER_PORT
+                  value: "{{ .Values.service.main.ports.main.port }}"
+                - name: MEND_RNV_AUTODISCOVER_FILTER
+                  value: "maverickd650/home-operations"
+                - name: MEND_RNV_DATA_HANDLER_TYPE
+                  value: postgresql
+                - name: PGDATABASE
+                  value: "{{ .Values.cnpg.main.database }}"
+                - name: PGUSER
+                  value: "{{ .Values.cnpg.main.user }}"
+                - name: PGPASSWORD
+                  value: "{{ .Values.cnpg.main.creds.password }}"
+                - name: PGHOST
+                  value: "{{ .Values.cnpg.main.creds.host }}"
+                - name: PGPORT
+                  value: "5432"
+                - name: LOG_LEVEL
+                  value: debug
 
     service:
       main:
