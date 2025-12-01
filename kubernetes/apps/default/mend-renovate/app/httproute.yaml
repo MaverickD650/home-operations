@@ -12,5 +12,5 @@ spec:
   hostnames: ["renovate.${SECRET_DOMAIN}"]
   rules:
     - backendRefs:
-        - name: mend-renovate
+        - name: mend-renovate-app-template
           port: 80
