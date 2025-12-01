@@ -6,7 +6,7 @@ metadata:
   name: mend-renovate
 spec:
   interval: 1h
-  path: ./kubernetes/apps/mend-renovate/mend-renovate/app
+  path: ./kubernetes/apps/default/mend-renovate/app
   postBuild:
     substituteFrom:
       - name: cluster-secrets
@@ -16,5 +16,5 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: mend-renovate
+  targetNamespace: default
   wait: true
