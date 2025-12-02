@@ -53,8 +53,14 @@ spec:
                 GATUS_CONFIG_PATH: "{{ .Values.persistence.config.mountPath }}"
             gatus-sidecar:
               enabled: true
-              type: init
               imageSelector: configsImage
+              probes:
+                liveness:
+                  enabled: false
+                readiness:
+                  enabled: false
+                startup:
+                  enabled: false
               args:
                 - --auto-httproute
                 - --enable-httproute
