@@ -62,12 +62,6 @@ spec:
                 cpu: 100m
               limits:
                 memory: 256Mi
-        statefulset:
-          volumeClaimTemplates:
-            - name: config
-              storageClass: longhorn
-              accessMode: ReadWriteOnce
-              size: 5Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -125,6 +119,14 @@ spec:
     serviceAccount:
       gatus: {}
     persistence:
+      data:
+        enabled: true
+        type: pvc
+        storageClass: longhorn
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        globalMounts:
+          - path: /config
       config-file:
         type: configMap
         name: "{{ .Release.Name }}-configmap"
