@@ -121,7 +121,7 @@ spec:
     persistence:
       data:
         enabled: true
-        type: pvc
+        type: persistentVolumeClaim
         storageClass: longhorn
         accessMode: ReadWriteOnce
         size: 5Gi
