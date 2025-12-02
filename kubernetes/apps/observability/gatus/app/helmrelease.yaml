@@ -48,6 +48,7 @@ spec:
           initContainers:
             gatus-sidecar:
               enabled: true
+              type: init
               imageSelector: configsImage
               args:
                 - --auto-httproute
