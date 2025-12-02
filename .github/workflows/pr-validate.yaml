@@ -25,6 +25,13 @@ jobs:
         uses: alexellis/setup-arkade@b1816384b2260cfd2c023c6798d26075786cfc7f # v3
       - name: Setup Workflow Tools
         run: arkade get kubeconform kustomize
+      - name: Substitute placeholder
+        uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
+        with:
+          input: 'kubernetes/**/*.yaml'
+          substitutionRegex: '\$\{(\w+)\}'
+          substitutionData: '{"SECRET_DOMAIN":"placeholder.example"}'
+          throwOnDataMissing: false
       - name: Run kubeconform
         shell: bash
         run: bash ./scripts/kubeconform.sh ${{ env.KUBERNETES_DIR }}
