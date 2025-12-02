@@ -28,7 +28,7 @@ jobs:
       - name: Substitute placeholder
         uses: faradaytrs/substitute-secrets-action@26e9dfb248ba425dcb806a0f54e274ef7e8448f7 # 2.4
         with:
-          input: 'clusters/main/kubernetes/**/*.yaml'
+          input: 'kubernetes/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
           substitutionData: '{"SECRET_DOMAIN":"placeholder.example"}'
           throwOnDataMissing: false
