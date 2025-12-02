@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/refs/heads/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,132 +9,148 @@ spec:
     kind: OCIRepository
     name: gatus
   interval: 1h
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
   values:
-    controllers:
-      gatus:
-        type: statefulset
-        annotations:
-          reloader.stakater.com/auto: "true"
-        initContainers:
-          gatus-sidecar:
-            image:
-              repository: ghcr.io/home-operations/gatus-sidecar
-              tag: 0.0.12@sha256:83bf82d422e9b0529a8076cb584d557a12158d9d8a4c373b4d27afcb87a17569
-            args:
-              - --auto-httproute
-              - --enable-httproute
-              - --enable-service
-            resources:
-              requests:
-                cpu: 100m
-              limits:
-                memory: 256Mi
-            restartPolicy: Always
-        containers:
-          app:
-            image:
-              repository: ghcr.io/twin/gatus
-              tag: v5.33.0@sha256:bf249f4d7cf69e825457ade2ebc3d11168d73527ef1657a653119a0d9da97a4a
-            env:
-              GATUS_DELAY_START_SECONDS: 5
-              GATUS_CONFIG_PATH: /config
-              GATUS_WEB_PORT: &port 80
-              TZ: Europe/London
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /health
-                    port: *port
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
-            resources:
-              requests:
-                cpu: 100m
-              limits:
-                memory: 256Mi
-        statefulset:
-            volumeClaimTemplates:
-              - name: config
-                accessMode: ReadWriteOnce
-                size: 5Gi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
+    global:
+      stopAll: false
+      skipEmptyWalArchiveCheck: true
+      annotations:
+        reloader.stakater.com/auto: "true"
+    image:
+      repository: ghcr.io/twin/gatus
+      pullPolicy: IfNotPresent
+      tag: v5.33.0@sha256:bf249f4d7cf69e825457ade2ebc3d11168d73527ef1657a653119a0d9da97a4a
+    configsImage:
+      repository: ghcr.io/home-operations/gatus-sidecar
+      pullPolicy: IfNotPresent
+      tag: 0.0.12@sha256:83bf82d422e9b0529a8076cb584d557a12158d9d8a4c373b4d27afcb87a17569
+    securityContext:
+      readOnlyRootFilesystem: false
     service:
-      app:
+      main:
         ports:
-          http:
-            port: *port
-    serviceMonitor:
-      app:
-        endpoints:
-          - port: http
-    route:
-      app:
-        annotations:
-          gatus.home-operations.com/enabled: "false"
-        hostnames:
-          - "{{ .Release.Name }}.${SECRET_DOMAIN}"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-    rbac:
-      roles:
-        gatus:
-          type: ClusterRole
-          rules:
-            - apiGroups:
-                - ""
+          main:
+            port: 8080
+    workload:
+      main:
+        podSpec:
+          initContainers:
+            gatus-sidecar:
+              imageSelector: configsImage
+              args:
+                - --auto-httproute
+                - --enable-httproute
+                - --enable-service
               resources:
-                - services
-              verbs:
-                - get
-                - watch
-                - list
-            - apiGroups:
-                - gateway.networking.k8s.io
-              resources:
-                - gateways
-                - httproutes
-              verbs:
-                - get
-                - watch
-                - list
-      bindings:
-        gatus:
-          type: ClusterRoleBinding
-          roleRef:
-            identifier: gatus
-          subjects:
-            - identifier: gatus
-    serviceAccount:
-      gatus: {}
-    persistence:
-      data:
+                requests:
+                  cpu: 100m
+                limits:
+                  memory: 256Mi
+          containers:
+            main:
+              imageSelector: image
+              env:
+                GATUS_DELAY_START_SECONDS: 5
+                GATUS_CONFIG_PATH: "{{ .Values.persistence.config.mountPath }}"
+    configmap:
+      gatus-config:
         enabled: true
-        type: persistentVolumeClaim
-        storageClass: longhorn
-        accessMode: ReadWriteOnce
-        size: 5Gi
-        globalMounts:
-          - path: /config
-      config-file:
-        type: configMap
-        name: "{{ .Release.Name }}-configmap"
-        globalMounts:
-          - path: /config/config.yaml
-            subPath: config.yaml
+        data:
+          config.yaml: |
+            {{- if .Values.cnpg.main.enabled }}
+            storage:
+              type: postgres
+              path: {{ (printf "%s?client_encoding=utf8" (.Values.cnpg.main.creds.std | trimAll "\"")) | quote }}
+            {{- end }}
+            alerting:
+              discord:
+                webhook-url: "${GATUS_DISCORD_WEBHOOK_GLOBAL}"
+                default-alert:
+                  description: "health check failed"
+                  send-on-resolved: true
+                  failure-threshold: 3
+                  success-threshold: 2
+            metrics: true
+            ui:
+              title: Status | Gatus
+              header: Status
+              logo: https://avatars.githubusercontent.com/u/213795
+              link: https://github.com/MaverickD650
+              buttons:
+                - name: Github
+                  link: https://github.com/MaverickD650
+                - name: Homelab
+                  link: https://github.com/MaverickD650/home-operations
+            {{- $.Values.gatus | toYaml | nindent 2 }}
+
+    persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        targetSelectAll: true
+      gatus-config:
+        enabled: true
+        type: configmap
+        mountPath: /config/config.yaml
+        objectName: gatus-config
+        readOnly: true
+        subPath: config.yaml
+
+    cnpg:
+      main:
+        enabled: true
+        user: gatus
+        database: gatus
+        backups:
+          enabled: false
+
+    # -- Whether Role Based Access Control objects like roles and rolebindings should be created
+    rbac:
+      main:
+        enabled: true
+        primary: true
+        clusterWide: true
+        rules:
+          - apiGroups: [""]
+            resources:
+              - "services"
+            verbs:
+              - "get"
+              - "list"
+              - "watch"
+          - apiGroups:
+              - "gateway.networking.k8s.io"
+            resources:
+              - "gateways"
+              - "httproutes"
+            verbs:
+              - "get"
+              - "list"
+              - "watch"
+    # -- The service account the pods will use to interact with the Kubernetes API
+    serviceAccount:
+      main:
+        enabled: true
+        primary: true
+
+    podOptions:
+      automountServiceAccountToken: true
+
+    metrics:
+      main:
+        enabled: true
+        type: "servicemonitor"
+        endpoints:
+          - port: main
+            path: /metrics
