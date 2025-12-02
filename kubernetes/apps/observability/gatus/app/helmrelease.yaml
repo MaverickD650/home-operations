@@ -45,7 +45,12 @@ spec:
     workload:
       main:
         podSpec:
-          initContainers:
+          containers:
+            main:
+              imageSelector: image
+              env:
+                GATUS_DELAY_START_SECONDS: 5
+                GATUS_CONFIG_PATH: "{{ .Values.persistence.config.mountPath }}"
             gatus-sidecar:
               enabled: true
               type: init
@@ -59,12 +64,6 @@ spec:
                   cpu: 100m
                 limits:
                   memory: 256Mi
-          containers:
-            main:
-              imageSelector: image
-              env:
-                GATUS_DELAY_START_SECONDS: 5
-                GATUS_CONFIG_PATH: "{{ .Values.persistence.config.mountPath }}"
     configmap:
       gatus-config:
         enabled: true
