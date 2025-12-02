@@ -47,6 +47,7 @@ spec:
         podSpec:
           initContainers:
             gatus-sidecar:
+              enabled: true
               imageSelector: configsImage
               args:
                 - --auto-httproute
