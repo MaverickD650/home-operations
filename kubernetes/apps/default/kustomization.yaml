@@ -10,4 +10,5 @@ components:
 resources:
   - ./namespace.yaml
   - ./echo/ks.yaml
+  - ./homepage/ks.yaml
   - ./mend-renovate/ks.yaml
