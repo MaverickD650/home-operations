@@ -14,5 +14,5 @@ spec:
   hostnames: ["status.${SECRET_DOMAIN}"]
   rules:
     - backendRefs:
-        - name: gatus
-          port: 80
+        - name: gatus-app-template
+          port: 8080
