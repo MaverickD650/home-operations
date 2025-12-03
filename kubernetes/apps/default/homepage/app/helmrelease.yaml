@@ -45,10 +45,18 @@ spec:
             credentials: s3
             dest:
               enabled: true
+              moverSecurityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                fsGroup: 0
             src:
               enabled: true
               trigger:
                 schedule: "0 1 * * *"
+              moverSecurityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                fsGroup: 0
       public:
         enabled: true
         mountPath: /app/public/images
