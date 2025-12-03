@@ -13,4 +13,5 @@ spec:
   rules:
     - backendRefs:
         - name: headlamp
+          namespace: observability
           port: 4466
