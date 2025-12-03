@@ -73,4 +73,4 @@ spec:
     addons:
       codeserver:
         # -- Enable running a code-server container in the pod
-        enabled: false
+        enabled: true
