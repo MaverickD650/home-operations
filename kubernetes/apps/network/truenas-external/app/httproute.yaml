@@ -12,5 +12,5 @@ spec:
   hostnames: ["storage.${SECRET_DOMAIN}"]
   rules:
     - backendRefs:
-        - name: truenas-external
-          port: 80
+        - name: truenas-external-external-service
+          port: 81
