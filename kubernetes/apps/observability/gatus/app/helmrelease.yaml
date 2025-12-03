@@ -98,25 +98,6 @@ spec:
                 interval: 1m
                 conditions:
                   - "[CONNECTED] == true"
-            endpoints:
-              - name: Cloudflare
-                group: connectivity
-                url: icmp://1.1.1.1
-                interval: 1m
-                conditions:
-                  - "[CONNECTED] == true"
-              - name: Google
-                group: connectivity
-                url: icmp://8.8.8.8
-                interval: 1m
-                conditions:
-                  - "[CONNECTED] == true"
-              - name: Quad9
-                group: connectivity
-                url: icmp://9.9.9.9
-                interval: 1m
-                conditions:
-                  - "[CONNECTED] == true"
             {{- if .Values.cnpg.main.enabled }}
             storage:
               type: postgres
@@ -134,7 +115,7 @@ spec:
             ui:
               title: Status | Gatus
               header: Status
-              logo: https://avatars.githubusercontent.com/u/213795
+              logo: https://avatars.githubusercontent.com/u/92877124
               link: https://github.com/MaverickD650
               buttons:
                 - name: Github
