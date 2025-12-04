@@ -13,7 +13,7 @@ spec:
     - name: envoy-internal
       namespace: network
       sectionName: https
-  hostnames: ["home.${SECRET_DOMAIN}"]
+  hostnames: ["link.${SECRET_DOMAIN}"]
   rules:
     - backendRefs:
         - name: linkwarden
