@@ -6,8 +6,6 @@ metadata:
   name: lldap
 spec:
   dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
     - name: cloudnative-pg
       namespace: system
   interval: 1h
