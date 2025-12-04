@@ -12,4 +12,5 @@ resources:
   - ./echo/ks.yaml
   - ./freshrss/ks.yaml
   - ./homepage/ks.yaml
+  - ./linkwarden/ks.yaml
   - ./mend-renovate/ks.yaml
