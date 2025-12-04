@@ -109,6 +109,8 @@ spec:
   compression:
     - type: Brotli
     - type: Gzip
+  httpUpgrade:
+    - type: websocket
   connection:
     bufferLimit: 8Mi
   targetSelectors:
