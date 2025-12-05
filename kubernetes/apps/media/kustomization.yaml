@@ -9,5 +9,5 @@ components:
 
 resources:
   - ./namespace.yaml
-  #- ./calibre2/ks.yaml
+  - ./calibre2/ks.yaml
   - ./filebrowser/ks.yaml
