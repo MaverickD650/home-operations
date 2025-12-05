@@ -8,6 +8,7 @@ metadata:
     gatus.home-operations.com/endpoint: |
       client:
         dns-resolver: tcp://${UNIFI_HOST}:53
+      conditions: ["[STATUS] == CONNECTED"]
 spec:
   parentRefs:
     - name: envoy-internal
