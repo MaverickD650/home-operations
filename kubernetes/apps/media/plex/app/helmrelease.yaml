@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/refs/heads/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plex
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: plex
+  interval: 1h
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    plex:
+      serverIP: 192.168.20.3
+      additionalAdvertiseURL: "https://plex.${SECRET_DOMAIN}, https://plex.${SECRET_DOMAIN}:32400"
+      disableGDM: false
+      requireHTTPS: false
+    credentials:
+      s3:
+        type: s3
+        url: "${S3URL}"
+        bucket: "${S3PREFIX}-plex"
+        accessKey: "${S3ID}"
+        secretKey: "${S3KEY}"
+        encrKey: "${S3KEY}"
+    service:
+      main:
+        type: LoadBalancer
+        loadBalancerIP: 192.168.20.3
+        integrations:
+          metallb:
+            enabled: false
+
+    persistence:
+      config:
+        volsync:
+          - name: config
+            type: restic
+            credentials: s3
+            dest:
+              enabled: true
+              moverSecurityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                fsGroup: 0
+            src:
+              enabled: true
+              trigger:
+                schedule: "0 1 * * *"
+              moverSecurityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                fsGroup: 0
+      stash1:
+        enabled: true
+        type: nfs
+        path: /mnt/media/stash/misc
+        mountPath: "/data/stash1"
+        server: 192.168.50.118
+      stash2:
+        enabled: true
+        type: nfs
+        path: /mnt/media/stash-rm
+        mountPath: "/data/stash2"
+        server: 192.168.50.118
+      media:
+        enabled: true
+        type: nfs
+        path: /mnt/media/mediashare
+        mountPath: "/data/media"
+        server: 192.168.50.118
+
+    addons:
+      codeserver:
+        # -- Enable running a code-server container in the pod
+        enabled: true
