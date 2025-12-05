@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/refs/heads/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: paperless-ngx
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: paperless-ngx
+  interval: 1h
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    global:
+      stopAll: true
+    credentials:
+      s3:
+        type: s3
+        url: "${S3URL}"
+        bucket: "${S3PREFIX}-paperless"
+        accessKey: "${S3ID}"
+        secretKey: "${S3KEY}"
+        encrKey: "${S3KEY}"
+    persistence:
+      data:
+        volsync:
+          - name: data
+            type: restic
+            credentials: s3
+            dest:
+              enabled: true
+            src:
+              enabled: true
+              trigger:
+                schedule: "30 1 * * *"
+      media:
+        enabled: true
+        type: nfs
+        path: /mnt/media/filing/store
+        mountPath: "/media"
+        server: 192.168.50.118
+      consume:
+        enabled: true
+        type: nfs
+        path: /mnt/media/filing/consume
+        mountPath: "/consume"
+        server: 192.168.50.118
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                PAPERLESS_URL: "${PSURL}"
+                PAPERLESS_WEBSERVER_WORKERS: 2
+                PAPERLESS_ADMIN_USER: "${PSADMINU}"
+                PAPERLESS_ADMIN_PASSWORD: "${PSADMINP}"
+                PAPERLESS_ADMIN_MAIL: "${PSADMINE}"
+                PAPERLESS_OCR_LANGUAGE: "eng"
+                PAPERLESS_OCR_LANGUAGES: "eng fra deu spa ita"
+                PAPERLESS_ENABLE_HTTP_REMOTE_USER: true
+                PAPERLESS_LOGOUT_REDIRECT_URL: "${PSLOURL}"
+    cnpg:
+      main:
+        mode: recovery
+        cluster:
+          singleNode: true
+        backups:
+          enabled: true
+          credentials: s3
+        recovery:
+          method: object_store
+          credentials: s3
+    resources:
+      limits:
+        cpu: 5000m
+        memory: 10Gi
