@@ -23,7 +23,7 @@ spec:
     keepHistory: false
   values:
     global:
-      stopAll: true
+      stopAll: false
     plex:
       serverIP: 192.168.20.3
       additionalAdvertiseURL: "https://plex.${SECRET_DOMAIN}, https://plex.${SECRET_DOMAIN}:32400"
