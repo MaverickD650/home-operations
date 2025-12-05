@@ -70,6 +70,9 @@ spec:
               enabled: true
               trigger:
                 schedule: "0 1 * * *"
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
     addons:
       codeserver:
         # -- Enable running a code-server container in the pod
