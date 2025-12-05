@@ -11,5 +11,5 @@ resources:
   - ./namespace.yaml
   - ./calibre2/ks.yaml
   - ./filebrowser/ks.yaml
-  - ./stash/ks.yaml
-  - ./stash2/ks.yaml
+  #- ./stash/ks.yaml
+  #- ./stash2/ks.yaml
