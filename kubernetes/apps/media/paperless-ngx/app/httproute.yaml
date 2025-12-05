@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: paperless-ngx
+  annotations:
+    gatus.home-operations.com/endpoint: |
+      client:
+        dns-resolver: tcp://${UNIFI_HOST}:53
+spec:
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+      sectionName: https
+  hostnames: ["filing.${SECRET_DOMAIN}"]
+  rules:
+    - backendRefs:
+        - name: paperless-ngx
+          port: 10140
