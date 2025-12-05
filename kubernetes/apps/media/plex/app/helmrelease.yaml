@@ -22,6 +22,7 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    
     plex:
       serverIP: 192.168.20.3
       additionalAdvertiseURL: "https://plex.${SECRET_DOMAIN}, https://plex.${SECRET_DOMAIN}:32400"
