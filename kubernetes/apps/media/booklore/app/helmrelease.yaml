@@ -49,3 +49,9 @@ spec:
               moverSecurityContext:
                 runAsUser: 0
                 runAsGroup: 0
+      books:
+        enabled: true
+        type: nfs
+        path: /mnt/media/calibre
+        mountPath: "/books"
+        server: 192.168.50.118
