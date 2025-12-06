@@ -9,7 +9,7 @@ components:
 
 resources:
   - ./namespace.yaml
-  - ./booklore/ks.yaml
+  #- ./booklore/ks.yaml
   - ./calibre2/ks.yaml
   - ./filebrowser/ks.yaml
   - ./paperless-ngx/ks.yaml
