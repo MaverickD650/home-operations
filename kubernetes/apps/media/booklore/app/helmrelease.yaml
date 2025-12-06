@@ -32,3 +32,20 @@ spec:
         accessKey: "${S3ID}"
         secretKey: "${S3KEY}"
         encrKey: "${S3KEY}"
+    persistence:
+      data:
+        volsync:
+          - name: data
+            type: restic
+            credentials: s3
+            dest:
+              enabled: true
+              moverSecurityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                fsGroup: 0
+            src:
+              enabled: true
+              moverSecurityContext:
+                runAsUser: 0
+                runAsGroup: 0
