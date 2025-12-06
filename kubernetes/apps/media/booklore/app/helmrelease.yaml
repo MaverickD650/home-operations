@@ -52,7 +52,7 @@ spec:
       books:
         enabled: true
         type: nfs
-        path: /mnt/media/calibre/Library
+        path: /mnt/media/calibre
         mountPath: "/books"
         server: 192.168.50.118
       bookdrop:
