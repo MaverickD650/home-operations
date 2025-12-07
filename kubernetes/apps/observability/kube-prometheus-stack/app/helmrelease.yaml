@@ -15,6 +15,10 @@ spec:
       route:
         main:
           enabled: true
+          annotations:
+            gatus.home-operations.com/endpoint: |
+              client:
+                dns-resolver: tcp://${UNIFI_HOST}:53
           hostnames:
             - alertmanager.${SECRET_DOMAIN}
           parentRefs:
@@ -41,6 +45,10 @@ spec:
       route:
         main:
           enabled: true
+          annotations:
+            gatus.home-operations.com/endpoint: |
+              client:
+                dns-resolver: tcp://${UNIFI_HOST}:53
           hostnames:
             - prometheus.${SECRET_DOMAIN}
           parentRefs:
