@@ -136,7 +136,7 @@ spec:
     initialStreamWindowSize: 512Ki
     initialConnectionWindowSize: 8Mi
     onInvalidMessage: TerminateStream
-  #http3: {} Commented out until full websocket support
+  http3: {}
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
