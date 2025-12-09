@@ -11,5 +11,6 @@ resources:
   - ./namespace.yaml
   - ./cloudnative-pg/ks.yaml
   - ./generic-device-plugin/ks.yaml
+  - ./kopia/ks.yaml
   - ./tuppr/ks.yaml
   - ./volsync/ks.yaml
