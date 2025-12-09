@@ -10,5 +10,5 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 3.15.1
-  url: oci://oci.trueforge.org/truecharts/volsync
+    tag: 0.17.15
+  url: oci://ghcr.io/home-operations/charts-mirror/volsync-perfectra1n

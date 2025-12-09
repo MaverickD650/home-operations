@@ -4,9 +4,14 @@ kind: Kustomization
 metadata:
   name: volsync
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: volsync
   interval: 1h
   path: ./kubernetes/apps/system/volsync/app
   postBuild:
+    substitute:
+      APP: volsync
     substituteFrom:
       - name: cluster-secrets
         kind: Secret
