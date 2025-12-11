@@ -39,7 +39,7 @@ nodes:
         vip:
           ip: "192.168.50.139"
     userVolumes:
-      - name: host-nvme
+      - name: longhorn
         provisioning:
           diskSelector:
             match: disk.model == "CT2000T500SSD8"  && !system_disk

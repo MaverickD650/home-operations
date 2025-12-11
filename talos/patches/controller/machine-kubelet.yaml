@@ -3,9 +3,9 @@ machine:
     vm.nr_hugepages: "1024"
   kubelet:
     extraMounts:
-      - destination: /var/mnt/host-nvme/
+      - destination: /var/mnt/longhorn/
         type: bind
-        source: /var/mnt/host-nvme/
+        source: /var/mnt/longhorn/
         options:
           - rbind
           - rshared
