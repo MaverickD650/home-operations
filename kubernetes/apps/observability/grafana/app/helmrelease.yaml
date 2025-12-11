@@ -31,10 +31,6 @@ spec:
                 GF_PANELS_DISABLE_SANITIZE_HTML: true
                 GF_SERVER_ROOT_URL: https://monitor.${SECRET_DOMAIN}
                 GF_AUTH_OAUTH_SKIP_ORG_ROLE_UPDATE_SYNC: true
-              envFrom:
-                - secretRef:
-                    name: grafana-secret
-                    expandObjectName: false
 
     configmap:
       dashboard-provider:
