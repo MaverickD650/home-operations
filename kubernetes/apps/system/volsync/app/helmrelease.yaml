@@ -17,20 +17,26 @@ spec:
     remediation:
       retries: 3
   values:
-    fullnameOverride: volsync # Required for volsync-perfectra1n fork
-    image: &image
-      repository: ghcr.io/perfectra1n/volsync
-      tag: v0.16.13
-    kopia: *image
-    rclone: *image
-    restic: *image
-    rsync: *image
-    rsync-tls: *image
-    syncthing: *image
-    manageCRDs: true
+    workload:
+      main:
+        podSpec:
+          containers:
+            kube-rbac-proxy:
+              args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --proxy-endpoints-port=8888
+                - "--tls-min-version=VersionTLS12"
+                - --v=0
+                - --ignore-paths=/metrics
     metrics:
-      disableAuth: true
-    podSecurityContext:
-      runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 1000
+      main:
+        enabled: true
+        type: servicemonitor
+        endpoints:
+          - port: metrics
+            path: /metrics
+            scheme: https
+            tlsConfig:
+              insecureSkipVerify: true
+        targetSelector: metrics
