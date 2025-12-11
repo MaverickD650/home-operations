@@ -12,7 +12,7 @@ resources:
   - ./booklore/ks.yaml
   - ./calibre2/ks.yaml
   - ./filebrowser/ks.yaml
-  #- ./paperless-ngx/ks.yaml
+  - ./paperless-ngx/ks.yaml
   - ./plex/ks.yaml
   #- ./stash/ks.yaml
   #- ./stash2/ks.yaml
