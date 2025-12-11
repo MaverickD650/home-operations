@@ -5,7 +5,7 @@ resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
   - ./ocirepository.yaml
-  #- ./snapshot-cleanup.yaml
-  #- ./snapshot-delete.yaml
-  #- ./trim.yaml
+  - ./snapshot-cleanup.yaml
+  - ./snapshot-delete.yaml
+  - ./trim.yaml
   - ./volumeSnapshotClass.yaml
