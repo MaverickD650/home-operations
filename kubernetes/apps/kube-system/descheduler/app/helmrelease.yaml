@@ -70,6 +70,6 @@ spec:
     service:
       enabled: true
     serviceMonitor:
-      enabled: false
+      enabled: true
     leaderElection:
       enabled: true
