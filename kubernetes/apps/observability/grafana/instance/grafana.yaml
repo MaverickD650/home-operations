@@ -61,7 +61,7 @@ spec:
   httpRoute:
     spec:
       hostnames:
-        - monitor.${SECRET_DOMAIN}
+        - monitor.g5yss.uk
       parentRefs:
         - name: envoy-internal
           namespace: network
