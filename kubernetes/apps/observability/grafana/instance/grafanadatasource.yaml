@@ -13,4 +13,4 @@ spec:
     name: prometheus
     access: proxy
     isDefault: true
-    url: http://prometheus-operated.observability.svc.cluster.local:9090
+    url: http://prometheus-operated:9090
