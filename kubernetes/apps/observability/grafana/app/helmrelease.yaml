@@ -1,56 +1,16 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/refs/heads/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: grafana
+  name: grafana-operator
 spec:
   chartRef:
     kind: OCIRepository
-    name: grafana
+    name: grafana-operator
   interval: 1h
-  timeout: 20m
-  maxHistory: 3
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
-    workload:
-      main:
-        podSpec:
-          containers:
-            main:
-              env:
-                GF_PANELS_DISABLE_SANITIZE_HTML: true
-                GF_SERVER_ROOT_URL: https://monitor.${SECRET_DOMAIN}
-                GF_AUTH_OAUTH_SKIP_ORG_ROLE_UPDATE_SYNC: true
-
-    configmap:
-      dashboard-provider:
-        enabled: true
-        data:
-          provider.yaml: |-
-            apiVersion: 1
-            providers:
-              - name: sidecarProvider
-                orgId: 1
-                folder: ''
-                type: file
-                disableDeletion: false
-                allowUiUpdates: true
-                updateIntervalSeconds: 30
-                options:
-                  foldersFromFilesStructure: true
-                  path: /tmp/dashboards
-
-    cnpg:
-      main:
-        cluster:
-          singleNode: true
+    dashboard:
+      enabled: true
+    serviceMonitor:
+      enabled: true
