@@ -9,5 +9,9 @@ spec:
     name: flux-operator
   interval: 1h
   values:
+    web:
+      enabled: true
+      networkPolicy:
+        create: false
     serviceMonitor:
       create: true
