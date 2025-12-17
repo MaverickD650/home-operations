@@ -14,6 +14,8 @@ spec:
       name: "*"
     - kind: Kustomization
       name: "*"
+  exclusionList:
+    - "^DependencyNotReady$"
 ---
 # yaml-language-server: $schema=https://github.com/fluxcd-community/flux2-schemas/raw/main/alert-notification-v1beta3.json
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
