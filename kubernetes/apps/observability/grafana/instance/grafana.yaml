@@ -17,6 +17,20 @@ spec:
       disable_login_form: "false"
     auth.anonymous:
       enabled: "true"
+    auth.generic_oauth:
+      enabled: "true"
+      name: "Pocket ID"
+      allow_sign_up: "true"
+      scopes: "openid profile email groups"
+      email_attribute_path: email
+      login_attribute_path: preferred_username
+      name_attribute_path: name
+      groups_attribute_path: groups
+      client-id: "${AUTH_CLIENT_ID}"
+      client-secret: "${AUTH_CLIENT_SECRET}"
+      auth_url: "${AUTH_AUTH_URL}"
+      token_url: "${AUTH_TOKEN_URL}"
+      role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
     log:
       mode: console
     metrics:
@@ -44,6 +58,26 @@ spec:
                     secretKeyRef:
                       name: grafana-admin
                       key: GF_SECURITY_ADMIN_PASSWORD
+                - name: AUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin
+                      key: client-id
+                - name: AUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin
+                      key: client-secret
+                - name: AUTH_AUTH_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin
+                      key: auth-url
+                - name: AUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin
+                      key: token-url
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
