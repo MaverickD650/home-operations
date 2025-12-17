@@ -15,6 +15,7 @@ spec:
       reporting_enabled: "false"
     auth:
       disable_login_form: "false"
+      skip_org_role_sync: "true"
     auth.anonymous:
       enabled: "true"
     auth.generic_oauth:
