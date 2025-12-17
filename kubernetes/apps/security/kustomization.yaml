@@ -11,4 +11,4 @@ resources:
   - ./namespace.yaml
   - ./authelia/ks.yaml
   - ./lldap/ks.yaml
-  #- ./pocket-id/ks.yaml
+  - ./pocket-id/ks.yaml
