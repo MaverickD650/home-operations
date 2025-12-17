@@ -26,8 +26,8 @@ spec:
       login_attribute_path: preferred_username
       name_attribute_path: name
       groups_attribute_path: groups
-      client-id: "${AUTH_CLIENT_ID}"
-      client-secret: "${AUTH_CLIENT_SECRET}"
+      client_id: "${AUTH_CLIENT_ID}"
+      client_secret: "${AUTH_CLIENT_SECRET}"
       auth_url: "http://pocket-id-app-template.security:1411/authorize"
       token_url: "http://pocket-id-app-template.security:1411/api/oidc/token"
       role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
