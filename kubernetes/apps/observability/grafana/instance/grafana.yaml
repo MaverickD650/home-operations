@@ -28,8 +28,8 @@ spec:
       groups_attribute_path: groups
       client-id: "${AUTH_CLIENT_ID}"
       client-secret: "${AUTH_CLIENT_SECRET}"
-      auth_url: "${AUTH_AUTH_URL}"
-      token_url: "${AUTH_TOKEN_URL}"
+      auth_url: "http://pocket-id-app-template.security:1411/authorize"
+      token_url: "http://pocket-id-app-template.security:1411/api/oidc/token"
       role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
     log:
       mode: console
