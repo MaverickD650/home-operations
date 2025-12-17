@@ -26,8 +26,8 @@ spec:
       login_attribute_path: preferred_username
       name_attribute_path: name
       groups_attribute_path: groups
-      auth_url: "http://pocket-id-app-template.security:1411/authorize"
-      token_url: "http://pocket-id-app-template.security:1411/api/oidc/token"
+      auth_url: "https://pocket.g5yss.uk/authorize"
+      token_url: "https://pocket.g5yss.uk/api/oidc/token"
       role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
     log:
       mode: console
@@ -66,6 +66,16 @@ spec:
                     secretKeyRef:
                       name: grafana-admin
                       key: client-secret
+                - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin
+                      key: auth-url
+                - name: GF_AUTH_GENERIC_OAUTH_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin
+                      key: token-url
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
