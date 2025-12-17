@@ -26,8 +26,6 @@ spec:
       login_attribute_path: preferred_username
       name_attribute_path: name
       groups_attribute_path: groups
-      auth_url: "https://pocket.g5yss.uk/authorize"
-      token_url: "https://pocket.g5yss.uk/api/oidc/token"
       role_attribute_path: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'"
     log:
       mode: console
