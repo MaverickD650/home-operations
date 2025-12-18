@@ -42,6 +42,13 @@ spec:
           from_name: Mealie
           from_email: "${SMTP_EMAIL}"
           auth_strategy: TLS
+        oidc:
+          auth_enabled: true
+          sign_enabled: true
+          configuration_url: "${OIDC_DISCOVERY_URL}"
+          client_id: "${MEALIE_OIDC_CLIENT}"
+          client_secret: "${MEALIE_OIDC_SECRET}"
+          provider_name: "Pocket ID"
     persistence:
       data:
         volsync:
