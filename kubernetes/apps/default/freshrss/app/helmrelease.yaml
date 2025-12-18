@@ -30,6 +30,19 @@ spec:
         accessKey: "${S3ID}"
         secretKey: "${S3KEY}"
         encrKey: "${S3KEY}"
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                OIDC_ENABLED: 1
+                OIDC_CLIENT_ID: "${FRESHRSS_CID}"
+                OIDC_CLIENT_SECRET: "${FRESHRSS_CSECRET}"
+                OIDC_PROVIDER_METADATA_URL: "${OIDC_DISCOVERY_URL}"
+                OIDC_SCOPES: "openid email profile"
+                OIDC_X_FORWARDED_HEADERS: "X-Forwarded-Proto X-Forwarded-Port"
+                OIDC_REMOTE_USER_CLAIM: "preferred_username"
     persistence:
       config:
         volsync:
