@@ -10,7 +10,7 @@ spec:
       "cnpg.io/cluster": paperless-ngx-cnpg-main
   podMetricsEndpoints:
   - port: metrics
-    scheme: https
+    scheme: http
     tlsConfig:
       ca:
         secret:
