@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: paperless-ngx-cnpg-main
+spec:
+  selector:
+    matchLabels:
+      "cnpg.io/cluster": paperless-ngx-cnpg-main
+  podMetricsEndpoints:
+  - port: metrics
+    scheme: https
+    tlsConfig:
+      ca:
+        secret:
+          name: paperless-ngx-cnpg-main-ca
+          key: ca.crt
+      serverName: paperless-ngx-cnpg-main-rw

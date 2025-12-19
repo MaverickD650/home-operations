@@ -23,6 +23,6 @@ spec:
       create: true
     replicaCount: 1
     monitoring:
-      podMonitorEnabled: true
+      podMonitorEnabled: false
       grafanaDashboard:
         create: true
