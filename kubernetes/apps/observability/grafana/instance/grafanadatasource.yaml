@@ -24,7 +24,7 @@ spec:
     access: proxy
     type: victoriametrics-logs-datasource
     name: VL
-    url: http://victoria-logs-server.monitoring.svc.cluster.local:9428
+    url: http://victoria-logs-server.observability.svc.cluster.local:9428
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
