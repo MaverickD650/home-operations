@@ -46,6 +46,8 @@ spec:
                 APP_URL: https://pocket.${SECRET_DOMAIN}
                 TRUST_PROXY: true
                 UPLOAD_PATH: /app/data/uploads
+                METRICS_ENABLED: true
+                OTEL_METRICS_EXPORTER: prometheus
     persistence:
       config:
         enabled: true
