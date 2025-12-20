@@ -44,10 +44,10 @@ spec:
               env:
                 DB_CONNECTION_STRING: file:/app/data/pocket-id.db?_journal_mode=WAL&_busy_timeout=2500&_txlock=immediate
                 APP_URL: https://pocket.${SECRET_DOMAIN}
-                TRUST_PROXY: true
+                TRUST_PROXY: "true"
                 UPLOAD_PATH: /app/data/uploads
-                METRICS_ENABLED: true
-                OTEL_METRICS_EXPORTER: prometheus
+                METRICS_ENABLED: "true"
+                OTEL_METRICS_EXPORTER: "prometheus"
     persistence:
       config:
         enabled: true
