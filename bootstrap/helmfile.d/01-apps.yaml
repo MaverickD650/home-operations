@@ -19,13 +19,21 @@ releases:
     values: ['./templates/values.yaml.gotmpl']
     needs: ['kube-system/cilium']
 
-
   - name: cert-manager
     namespace: cert-manager
     chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.19.2
     values: ['./templates/values.yaml.gotmpl']
     needs: ['kube-system/coredns']
+
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 1.2.0
+    values:
+      - ./templates/values.yaml.gotmpl
+    needs:
+      - cert-manager/cert-manager
 
   - name: flux-operator
     namespace: flux-system
