@@ -33,13 +33,13 @@ spec:
           - name: UNIFI_HOST
             valueFrom:
               secretKeyRef:
-                name: &secret unifi-dns-secret
-                key: unifi-host
+                name: &secret unifi-ext-dns-secret
+                key: UNIFI_HOST
           - name: UNIFI_API_KEY
             valueFrom:
               secretKeyRef:
                 name: *secret
-                key: unifi-key
+                key: UNIFI_API_KEY
         livenessProbe:
           httpGet:
             path: /healthz
