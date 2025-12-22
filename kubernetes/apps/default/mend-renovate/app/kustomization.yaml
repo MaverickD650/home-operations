@@ -7,5 +7,4 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./httproute.yaml
-  - ./mendsecret.sops.yaml
   - ./podmonitor.yaml
