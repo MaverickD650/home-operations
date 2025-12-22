@@ -28,6 +28,8 @@ spec:
           containers:
             main:
               env:
-                UP_UNIFI_DEFAULT_URL: "https://${UNIFI_HOST}"
-                UP_UNIFI_DEFAULT_API_KEY: "${UNIFI_API_KEY}"
                 UP_INFLUXDB_DISABLE: "true"
+              envFrom:
+                - secretRef:
+                    name: unifi-secret
+                    expandObjectName: false
