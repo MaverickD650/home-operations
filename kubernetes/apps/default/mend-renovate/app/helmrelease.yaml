@@ -36,7 +36,7 @@ spec:
             main:
               envFrom:
                 - secretRef:
-                    name: mend-renovate-secret
+                    name: mend-rnv-secret
                     expandObjectName: false
               env:
                 MEND_RNV_ACCEPT_TOS: "Y"
