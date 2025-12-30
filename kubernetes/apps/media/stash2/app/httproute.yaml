@@ -18,8 +18,3 @@ spec:
     - backendRefs:
         - name: stash2
           port: 9999
-      filters:
-        - type: RequestHeaderModifier
-          requestHeaderModifier:
-            remove:
-              - Accept-Encoding
