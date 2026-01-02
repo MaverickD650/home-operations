@@ -48,6 +48,10 @@ spec:
                 UPLOAD_PATH: /app/data/uploads
                 METRICS_ENABLED: "true"
                 OTEL_METRICS_EXPORTER: "prometheus"
+              envFrom:
+                - secretRef:
+                    name: pocket-secret
+                    expandObjectName: false
     persistence:
       config:
         enabled: true
