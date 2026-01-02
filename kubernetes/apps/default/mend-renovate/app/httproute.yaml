@@ -10,7 +10,7 @@ metadata:
 spec:
   parentRefs:
     - name: envoy-external
-      namespace: default
+      namespace: network
       sectionName: https
   hostnames: ["renovate.${SECRET_DOMAIN}"]
   rules:
