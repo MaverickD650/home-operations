@@ -11,25 +11,23 @@ spec:
   values:
     web:
       enabled: true
-      baseURL: https://flux-dashboard.${SECRET_DOMAIN}
-      auth:
-        type: oidc
-        oidc:
-          clientIDFrom:
-            secretKeyRef:
-              name: flux-webui-oidc
-              key: clientID
-          clientSecretFrom:
-            secretKeyRef:
-              name: flux-webui-oidc
-              key: clientSecret
-          issuerURL: https://pocket.${SECRET_DOMAIN}
-          scopes:
-            - openid
-            - profile
-            - email
-            - groups
+      config:
+        baseURL: https://flux-dashboard.${SECRET_DOMAIN}
+        authentication:
+          type: OAuth2
+          oauth2:
+            provider: OIDC
+            issuerURL: https://pocket.${SECRET_DOMAIN}
       networkPolicy:
         create: false
     serviceMonitor:
       create: true
+  valuesFrom:
+    - kind: Secret
+      name: flux-webui-oidc
+      valuesKey: clientID
+      targetPath: web.config.authentication.oauth2.clientID
+    - kind: Secret
+      name: flux-webui-oidc
+      valuesKey: clientSecret
+      targetPath: web.config.authentication.oauth2.clientSecret
