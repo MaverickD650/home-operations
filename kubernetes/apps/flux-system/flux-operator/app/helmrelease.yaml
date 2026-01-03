@@ -23,7 +23,7 @@ spec:
             secretKeyRef:
               name: flux-webui-oidc
               key: clientSecret
-          issuer: https://pocket.${SECRET_DOMAIN}
+          issuerURL: https://pocket.${SECRET_DOMAIN}
           scopes:
             - openid
             - profile
