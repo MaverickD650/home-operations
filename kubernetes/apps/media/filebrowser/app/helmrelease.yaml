@@ -86,7 +86,7 @@ spec:
               methods:
                 oidc:
                   enabled: true
-                  issuerUrl: htttps://pocket.${SECRET_DOMAIN}
+                  issuerUrl: https://pocket.${SECRET_DOMAIN}
                   scopes: openid profile email groups
                   userIdentifier: preferred_username
                   createUser: true
