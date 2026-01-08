@@ -22,56 +22,126 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    global:
+      stopAll: false
+      annotations:
+        reloader.stakater.com/auto: "true"
+    image:
+      repository: ghcr.io/gtsteffaniak/filebrowser
+      pullPolicy: IfNotPresent
+      tag: 1.1.0-stable@sha256:3db0a5ebde84ff1de72c93f776495089e79f3e710e931687c1a720c162e32a20
+    securityContext:
+      readOnlyRootFilesystem: false
+    service:
+      main:
+        ports:
+          main:
+            port: 8080
     workload:
       main:
         podSpec:
           containers:
             main:
               env:
-                FB_NOAUTH: noauth
-                FB_ADDRESS: ""
-                FB_BASEURL: ""
-                FB_DATABASE: "/database/filebrowser.db"
-                FB_CONFIG: "/config/filebrowser.json"
-                FB_ROOT: "/data"
-                FB_PORT: "{{ .Values.service.main.ports.main.port }}"
+                FILEBROWSER_CONFIG: /config/config.yaml
+              envFrom:
+                - secretRef:
+                    name: filebrowser-secret
+                    expandObjectName: false
+
+    configmap:
+      config:
+        enabled: true
+        data:
+          config.yaml: |
+            ---
+            server:
+              port: 8080
+              database: /data/database.db
+              sources:
+                - path: /mnt/stash1
+                  config:
+                    denyByDefault: true
+                - path: /mnt/stash2
+                  config:
+                    denyByDefault: true
+                - path: /mnt/media
+                  config:
+                    denyByDefault: true
+                - path: /mnt/books
+                  config:
+                    denyByDefault: true
+                - path: /mnt/docsc
+                  config:
+                    denyByDefault: true
+                - path: /mnt/docss
+                  config:
+                    denyByDefault: true
+                - path: /mnt/home
+                  config:
+                    defaultEnabled: true
+                    createUserDir: true
+            auth:
+              methods:
+                oidc:
+                  enabled: true
+                  issuerUrl: htttps://pocket.${SECRET_DOMAIN}
+                  scopes: openid profile email groups
+                  userIdentifier: preferred_username
+                  createUser: true
+                  logoutRedirectUrl: https://pocket.${SECRET_DOMAIN}/api/oidc/end-session
+                  groupsClaim: groups
+                  adminGroup: admin
     persistence:
       data:
         enabled: true
         mountPath: "/data"
+      config:
+        enabled: true
+        mountPath: /config/config.yaml
+        subPath: config.yaml
+        readOnly: true
+        type: "configmap"
+        objectName: config
       stash1:
         enabled: true
         type: nfs
         path: /mnt/media/stash/misc
-        mountPath: "/data/stash1"
+        mountPath: "/mnt/stash1"
         server: 192.168.50.118
       stash2:
         enabled: true
         type: nfs
         path: /mnt/media/stash-rm
-        mountPath: "/data/stash2"
+        mountPath: "/mnt/stash2"
         server: 192.168.50.118
       media:
         enabled: true
         type: nfs
         path: /mnt/media/mediashare
-        mountPath: "/data/media"
+        mountPath: "/mnt/media"
         server: 192.168.50.118
       books:
         enabled: true
         type: nfs
         path: /mnt/media/calibre
-        mountPath: "/data/books"
+        mountPath: "/mnt/books"
         server: 192.168.50.118
       docsconsume:
         enabled: true
         type: nfs
         path: /mnt/media/filing/consume
-        mountPath: "/data/docsc"
+        mountPath: "/mnt/docsc"
         server: 192.168.50.118
       docsstore:
         enabled: true
         type: nfs
         path: /mnt/media/filing/store
-        mountPath: "/data/docss"
+        mountPath: "/mnt/docss"
+        server: 192.168.50.118
+      home:
+        enabled: true
+        type: nfs
+        path: /mnt/home
+        mountPath: "/mnt/home"
         server: 192.168.50.118
