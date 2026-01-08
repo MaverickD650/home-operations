@@ -16,5 +16,5 @@ spec:
   hostnames: ["files.${SECRET_DOMAIN}"]
   rules:
     - backendRefs:
-        - name: filebrowser
-          port: 10187
+        - name: filebrowser-app-template
+          port: 8080
