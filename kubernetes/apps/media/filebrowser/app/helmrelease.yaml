@@ -142,6 +142,6 @@ spec:
       home:
         enabled: true
         type: nfs
-        path: /mnt/home
+        path: /mnt/media/home
         mountPath: "/mnt/home"
         server: 192.168.50.118
