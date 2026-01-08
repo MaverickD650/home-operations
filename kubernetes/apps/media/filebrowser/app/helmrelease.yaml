@@ -58,6 +58,7 @@ spec:
             server:
               port: 8080
               database: /data/database.db
+              cacheDir: /config/cache
               sources:
                 - path: /mnt/stash1
                   config:
@@ -103,6 +104,10 @@ spec:
         readOnly: true
         type: "configmap"
         objectName: config
+      cache:
+        enabled: true
+        mountPath: /config/cache
+        type: emptyDir
       stash1:
         enabled: true
         type: nfs
