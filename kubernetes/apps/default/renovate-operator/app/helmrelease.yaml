@@ -16,8 +16,20 @@ spec:
       hostnames:
         - renovate.${SECRET_DOMAIN}
       parentRefs:
-        - name: envoy-external
+        - name: envoy-internal
           namespace: network
           sectionName: https
     webhook:
       enabled: true
+      route:
+        enabled: true
+        hostnames:
+          - renovate-webhook.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
