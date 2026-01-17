@@ -16,4 +16,4 @@ resources:
   - ./mealie/ks.yaml
   #- ./mend-renovate/ks.yaml
   - ./snippet-box/ks.yaml
-  #- ./renovate-operator/ks.yaml
+  - ./renovate-operator/ks.yaml
