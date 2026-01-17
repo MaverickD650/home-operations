@@ -11,6 +11,9 @@ spec:
   interval: 30m
   values:
     fullnameOverride: renovate-operator
+    commonLabels:
+      app.kubernetes.io/name: renovate-operator
+      app.kubernetes.io/instance: renovate-operator
     route:
       enabled: true
       hostnames:
