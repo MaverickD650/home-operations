@@ -5,13 +5,3 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
-patches:
-  - patch: |-
-      - op: add
-        path: /metadata/labels
-        value:
-          app.kubernetes.io/name: renovate-operator
-          app.kubernetes.io/instance: renovate-operator
-    target:
-      kind: HelmRelease
-      name: renovate-operator
