@@ -55,7 +55,7 @@ spec:
     - name: RENOVATE_PLATFORM_COMMIT
       value: "true"
   image: ghcr.io/renovatebot/renovate:42.84.2
-  parallelism: 5
+  parallelism: 1
   resources:
     requests:
       cpu: 100m
