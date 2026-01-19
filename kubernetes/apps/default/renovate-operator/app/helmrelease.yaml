@@ -12,6 +12,7 @@ spec:
   values:
     fullnameOverride: renovate-operator
     config:
+      defaultJobBackoffLimit: 5
       defaultJobActiveDeadlineSeconds: 900
     route:
       enabled: true
