@@ -62,6 +62,9 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 2Gi
   schedule: 0 * * * *
   secretRef: mavbot-home-ops
   webhook:
