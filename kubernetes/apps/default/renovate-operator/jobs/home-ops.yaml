@@ -39,6 +39,8 @@ kind: RenovateJob
 metadata:
   name: home-ops
   namespace: default
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   discoveryFilter: maverickd650/home-operations
   extraEnv:
