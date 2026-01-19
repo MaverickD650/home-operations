@@ -68,6 +68,6 @@ spec:
   schedule: 0 * * * *
   secretRef: mavbot-home-ops
   webhook:
-    enabled: false
+    enabled: true
     authentication:
       enabled: false

@@ -23,7 +23,7 @@ spec:
           namespace: network
           sectionName: https
     webhook:
-      enabled: false
+      enabled: true
       route:
         enabled: true
         hostnames:
