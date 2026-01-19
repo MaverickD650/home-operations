@@ -11,6 +11,8 @@ spec:
   interval: 30m
   values:
     fullnameOverride: renovate-operator
+    config:
+      defaultJobActiveDeadlineSeconds: 900
     route:
       enabled: true
       hostnames:
