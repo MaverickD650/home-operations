@@ -41,14 +41,11 @@ spec:
     - name: renovate-operator
   interval: 1h
   path: ./kubernetes/apps/default/renovate-operator/jobs
-  postBuild:
-    substituteFrom:
-      - name: cluster-secrets
-        kind: Secret
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: default
+  timeout: 5m
   wait: false
