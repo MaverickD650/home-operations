@@ -48,6 +48,8 @@ spec:
       value: "--dns-result-order=ipv4first"
     - name: RENOVATE_CACHE_DIR
       value: /cache/renovate
+    - name: RENOVATE_REPOSITORY_CACHE
+      value: "enabled"
     - name: LOG_LEVEL
       value: debug
     - name: RENOVATE_ALLOWED_COMMANDS
