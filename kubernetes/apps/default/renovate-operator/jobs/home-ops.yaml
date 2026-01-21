@@ -72,6 +72,8 @@ spec:
       value: "true"
     - name: RENOVATE_ALLOW_PLUGINS
       value: "true"
+    - name: RENOVATE_PRINT_CONFIG
+      value: "true"
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.system.svc.cluster.local:6379"
   image: ghcr.io/renovatebot/renovate:42.87.0
