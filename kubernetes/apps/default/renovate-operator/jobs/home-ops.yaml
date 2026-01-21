@@ -55,7 +55,7 @@ spec:
   discoveryFilter: maverickd650/home-operations
   extraEnv:
     - name: NODE_OPTIONS
-      value: "--dns-result-order=ipv4first"
+      value: "--max-old-space-size=16384 --trace-exit --trace-sigint --trace-uncaught --unhandled-rejections=warn --trace-warnings"
     - name: RENOVATE_CONFIG_FILE
       value: /config/config.js
     - name: RENOVATE_PERSIST_REPO_DATA
