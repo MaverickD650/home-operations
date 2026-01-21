@@ -12,8 +12,8 @@ spec:
   values:
     fullnameOverride: renovate-operator
     labels:
-      app.kubernetes.io/name: renovate-operator
-      app.kubernetes.io/instance: renovate-operator
+      app.kubernetes.io/name: renovate
+      app.kubernetes.io/instance: renovate
     config:
       defaultJobBackoffLimit: 5
       defaultJobActiveDeadlineSeconds: 900
