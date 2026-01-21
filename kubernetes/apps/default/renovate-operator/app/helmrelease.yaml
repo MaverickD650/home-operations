@@ -32,6 +32,12 @@ spec:
           - name: envoy-external
             namespace: network
             sectionName: https
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
+      limits:
+        memory: 100Mi
     metrics:
       enabled: true
       serviceMonitor:
