@@ -97,7 +97,7 @@ spec:
       mountPath: /cache
     - name: renovate-config
       mountPath: /config
-  schedule: 0 * * * *
+  schedule: "@hourly"
   secretRef: mavbot-home-ops
   webhook:
     enabled: true
