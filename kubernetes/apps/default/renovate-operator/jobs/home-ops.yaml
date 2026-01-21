@@ -1,3 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-config
+data:
+  config.js: |
+    module.exports = {
+      platform: 'github',
+      baseDir: '/cache/base',
+      cacheDir: '/cache/renovate',
+    };
 ---
 apiVersion: generators.external-secrets.io/v1alpha1
 kind: GithubAccessToken
@@ -46,12 +57,10 @@ spec:
   extraEnv:
     - name: NODE_OPTIONS
       value: "--dns-result-order=ipv4first"
-    - name: RENOVATE_CACHE_DIR
-      value: /cache/renovate
+    - name: RENOVATE_CONFIG_FILE
+      value: /config/config.js
     - name: RENOVATE_PERSIST_REPO_DATA
       value: "true"
-    - name: RENOVATE_BASE_DIR
-      value: /cache/base
     - name: RENOVATE_REPOSITORY_CACHE
       value: "enabled"
     - name: LOG_LEVEL
@@ -60,8 +69,6 @@ spec:
       value: '["pnpm run bundle"]'
     - name: RENOVATE_ENDPOINT
       value: https://api.github.com/
-    - name: RENOVATE_PLATFORM
-      value: github
     - name: RENOVATE_PLATFORM_COMMIT
       value: "true"
     - name: RENOVATE_ALLOW_PLUGINS
@@ -81,9 +88,14 @@ spec:
     - name: renovate-cache
       persistentVolumeClaim:
         claimName: renovate-cache-home-ops
+    - name: renovate-config
+      configMap:
+        name: renovate-config
   extraVolumeMounts:
     - name: renovate-cache
       mountPath: /cache
+    - name: renovate-config
+      mountPath: /config
   schedule: 0 * * * *
   secretRef: mavbot-home-ops
   webhook:
