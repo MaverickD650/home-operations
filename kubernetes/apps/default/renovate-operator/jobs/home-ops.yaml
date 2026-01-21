@@ -58,6 +58,8 @@ spec:
       value: "--trace-exit --trace-sigint --trace-uncaught --unhandled-rejections=warn --trace-warnings"
     - name: RENOVATE_CONFIG_FILE
       value: /config/config.js
+    - name: LOG_FORMAT
+      value: "json"
     - name: RENOVATE_PERSIST_REPO_DATA
       value: "true"
     - name: RENOVATE_REPOSITORY_CACHE
