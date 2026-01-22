@@ -45,3 +45,5 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
+      grafanaDashboard:
+        enabled: true
