@@ -1,0 +1,46 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: homepage-config
+spec:
+  interval: 1h
+  url: https://github.com/MaverickD650/homepage-config
+  ref:
+    branch: main
+  secretRef:
+    name: github-app-auth-hp
+  provider: github
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: homepage-config-repo
+spec:
+  interval: 1h
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: homepage-config
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/external-secrets.io/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: github-app-auth-hp
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: github-app-auth-hp
+  data:
+    - secretKey: githubAppID
+      remoteRef:
+        key: GITHUB_APP_ID
+    - secretKey: githubAppInstallationID
+      remoteRef:
+        key: GITHUB_APP_INSTALLATION_ID
+    - secretKey: githubAppPrivateKey
+      remoteRef:
+        key: GITHUB_APP_KEY
