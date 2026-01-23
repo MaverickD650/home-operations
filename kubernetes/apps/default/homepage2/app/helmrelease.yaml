@@ -47,6 +47,10 @@ spec:
             port: 3000
     route:
       internal:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            client:
+              dns-resolver: tcp://${UNIFI_HOST}:53
         hostnames: [*host]
         parentRefs:
           - name: envoy-internal
