@@ -43,4 +43,4 @@ spec:
         key: GITHUB_APP_INSTALLATION_ID
     - secretKey: githubAppPrivateKey
       remoteRef:
-        key: GITHUB_APP_KEY
+        key: MAVBOT_PEM
