@@ -5,6 +5,9 @@ kind: Kustomization
 metadata:
   name: filebrowser
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: filebrowser
   interval: 1h
   path: ./kubernetes/apps/media/filebrowser/app
   postBuild:
