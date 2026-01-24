@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://schema.301401.xyz/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -22,41 +22,73 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    global:
-      stopAll: false
-      annotations:
-        reloader.stakater.com/auto: "true"
-    image:
-      repository: ghcr.io/gtsteffaniak/filebrowser
-      pullPolicy: IfNotPresent
-      tag: 1.1.1-stable@sha256:aa6d214d269af8785f6af7c1bb3d2cda019a09265b3d3bdff22257e9dc993ee4
-    securityContext:
-      readOnlyRootFilesystem: false
+    controllers:
+      filebrowser:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/gtsteffaniak/filebrowser
+              tag: 1.1.1-stable@sha256:aa6d214d269af8785f6af7c1bb3d2cda019a09265b3d3bdff22257e9dc993ee4
+            env:
+              FILEBROWSER_CONFIG: /config/config.yaml
+            envFrom:
+              - secretRef:
+                  name: filebrowser-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: &port 80
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 512Mi
+        pod:
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
     service:
-      main:
-        ports:
-          main:
-            port: 8080
-    workload:
-      main:
-        podSpec:
-          containers:
-            main:
-              env:
-                FILEBROWSER_CONFIG: /config/config.yaml
-              envFrom:
-                - secretRef:
-                    name: filebrowser-secret
-                    expandObjectName: false
-
-    configmap:
-      config:
+      app:
         enabled: true
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |
+            client:
+              dns-resolver: tcp://${UNIFI_HOST}:53
+        hostnames:
+          - "files.${SECRET_DOMAIN}"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    configMaps:
+      config:
         data:
           config.yaml: |
             ---
             server:
-              port: 8080
+              port: 80
               database: /data/database.db
               cacheDir: /config/cache
               sources:
@@ -95,58 +127,57 @@ spec:
                   adminGroup: admin
     persistence:
       data:
-        enabled: true
-        mountPath: "/data"
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        globalMounts:
+          - path: /data
       config:
-        enabled: true
-        mountPath: /config/config.yaml
-        subPath: config.yaml
-        readOnly: true
-        type: "configmap"
-        objectName: config
+        type: configMap
+        identifier: config
       cache:
-        enabled: true
-        mountPath: /config/cache
         type: emptyDir
+        globalMounts:
+          - path: /config/cache
       stash1:
-        enabled: true
         type: nfs
+        server: 192.168.50.118
         path: /mnt/media/stash/misc
-        mountPath: "/mnt/stash1"
-        server: 192.168.50.118
+        globalMounts:
+          - path: /mnt/stash1
       stash2:
-        enabled: true
         type: nfs
+        server: 192.168.50.118
         path: /mnt/media/stash-rm
-        mountPath: "/mnt/stash2"
-        server: 192.168.50.118
+        globalMounts:
+          - path: /mnt/stash2
       media:
-        enabled: true
         type: nfs
+        server: 192.168.50.118
         path: /mnt/media/mediashare
-        mountPath: "/mnt/media"
-        server: 192.168.50.118
+        globalMounts:
+          - path: /mnt/media
       books:
-        enabled: true
         type: nfs
+        server: 192.168.50.118
         path: /mnt/media/calibre
-        mountPath: "/mnt/books"
-        server: 192.168.50.118
+        globalMounts:
+          - path: /mnt/books
       docsconsume:
-        enabled: true
         type: nfs
+        server: 192.168.50.118
         path: /mnt/media/filing/consume
-        mountPath: "/mnt/docsc"
-        server: 192.168.50.118
+        globalMounts:
+          - path: /mnt/docsc
       docsstore:
-        enabled: true
         type: nfs
+        server: 192.168.50.118
         path: /mnt/media/filing/store
-        mountPath: "/mnt/docss"
-        server: 192.168.50.118
+        globalMounts:
+          - path: /mnt/docss
       home:
-        enabled: true
         type: nfs
-        path: /mnt/media/home
-        mountPath: "/mnt/home"
         server: 192.168.50.118
+        path: /mnt/media/home
+        globalMounts:
+          - path: /mnt/home
