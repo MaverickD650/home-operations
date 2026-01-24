@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://schema.301401.xyz/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -22,20 +22,67 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    workload:
-      main:
-        podSpec:
-          containers:
-            main:
-              env:
-                UP_INFLUXDB_DISABLE: "true"
-              envFrom:
-                - secretRef:
+    controllers:
+      unpoller:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 568
+            fsGroupChangePolicy: "OnRootMismatch"
+            runAsGroup: 568
+            runAsUser: 568
+        containers:
+          unpoller:
+            image:
+              repository: ghcr.io/unpoller/unpoller
+              tag: v2.21.0
+            env:
+              UP_INFLUXDB_DISABLE: "true"
+              UP_UNIFI_DEFAULT_URL:
+                valueFrom:
+                  secretKeyRef:
                     name: unifi-secret
-                    expandObjectName: false
-    resources:
-      requests:
-        cpu: 75m
-        memory: 100Mi
-      limits:
-        memory: 100Mi
+                    key: UP_UNIFI_DEFAULT_URL
+              UP_UNIFI_DEFAULT_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: unifi-secret
+                    key: UP_UNIFI_DEFAULT_API_KEY
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 9130
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 75m
+                memory: 100Mi
+              limits:
+                memory: 500Mi
+    service:
+      app:
+        ports:
+          http:
+            port: 9130
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 2m # Unifi API only polls at 2m intervals
+            scrapeTimeout: 5s
