@@ -57,8 +57,6 @@ metadata:
 spec:
   discoveryFilter: maverickd650/home-operations
   extraEnv:
-    - name: NODE_OPTIONS
-      value: "--trace-exit --trace-sigint --trace-uncaught --unhandled-rejections=warn --trace-warnings"
     - name: RENOVATE_CONFIG_FILE
       value: /config/config.js
     - name: LOG_FORMAT
@@ -76,8 +74,6 @@ spec:
     - name: RENOVATE_PLATFORM_COMMIT
       value: "true"
     - name: RENOVATE_ALLOW_PLUGINS
-      value: "true"
-    - name: RENOVATE_PRINT_CONFIG
       value: "true"
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.system.svc.cluster.local:6379"
