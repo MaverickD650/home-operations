@@ -8,7 +8,7 @@ metadata:
 spec:
   commonMetadata:
     labels:
-      app.kubernetes,io/name: *app
+      app.kubernetes.io/name: *app
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
@@ -37,7 +37,7 @@ metadata:
 spec:
   commonMetadata:
     labels:
-      app.kubernetes,io/name: *app
+      app.kubernetes.io/name: *app
   dependsOn:
     - name: trust-manager
       namespace: *namespace
