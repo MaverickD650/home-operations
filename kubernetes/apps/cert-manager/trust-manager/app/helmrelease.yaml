@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://schema.301401.xyz/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app trust-manager
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  values:
+    secretTargets:
+      enabled: true
+      authorizedSecrets:
+        - root-ca
+        - postgres-client-ca
+    app:
+      webhook:
+        tls:
+          approverPolicy:
+            certManagerNamespace: cert-manager
