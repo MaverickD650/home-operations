@@ -26,7 +26,7 @@ jobs:
       - name: Setup Workflow Tools
         run: arkade get kubeconform kustomize
       - name: Substitute placeholder
-        uses: faradaytrs/substitute-secrets-action@14513ab8942aa363f0898a34aa88a52710cdaede # 2.6
+        uses: faradaytrs/substitute-secrets-action@dd57c74e8bd9a5987c202c80b1b336eb6ec8b5cf # 2.7
         with:
           input: 'kubernetes/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
@@ -52,7 +52,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
       - name: Substitute placeholder
-        uses: faradaytrs/substitute-secrets-action@14513ab8942aa363f0898a34aa88a52710cdaede # 2.6
+        uses: faradaytrs/substitute-secrets-action@dd57c74e8bd9a5987c202c80b1b336eb6ec8b5cf # 2.7
         with:
           input: 'kubernetes/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
@@ -104,7 +104,7 @@ jobs:
           persist-credentials: false
           token: ${{ steps.app-token.outputs.token }}
       - name: Substitute placeholder
-        uses: faradaytrs/substitute-secrets-action@14513ab8942aa363f0898a34aa88a52710cdaede # 2.6
+        uses: faradaytrs/substitute-secrets-action@dd57c74e8bd9a5987c202c80b1b336eb6ec8b5cf # 2.7
         with:
           input: 'pull/kubernetes/apps/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
@@ -118,7 +118,7 @@ jobs:
           persist-credentials: false
           token: ${{ steps.app-token.outputs.token }}
       - name: Substitute placeholder
-        uses: faradaytrs/substitute-secrets-action@14513ab8942aa363f0898a34aa88a52710cdaede # 2.6
+        uses: faradaytrs/substitute-secrets-action@dd57c74e8bd9a5987c202c80b1b336eb6ec8b5cf # 2.7
         with:
           input: 'default/kubernetes/apps/**/*.yaml'
           substitutionRegex: '\$\{(\w+)\}'
