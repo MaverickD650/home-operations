@@ -36,7 +36,7 @@ spec:
           unpoller:
             image:
               repository: ghcr.io/unpoller/unpoller
-              tag: v2.30.0
+              tag: v2.32.0
             env:
               UP_INFLUXDB_DISABLE: "true"
               UP_UNIFI_DEFAULT_URL:
