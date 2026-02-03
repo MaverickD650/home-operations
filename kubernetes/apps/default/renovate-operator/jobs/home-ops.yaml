@@ -77,7 +77,7 @@ spec:
       value: "true"
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.system.svc.cluster.local:6379"
-  image: ghcr.io/renovatebot/renovate:43.2.4
+  image: ghcr.io/renovatebot/renovate:43.2.5
   parallelism: 1
   resources:
     requests:
