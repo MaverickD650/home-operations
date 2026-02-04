@@ -14,10 +14,12 @@
       "overridePackageName": "ghcr.io/siderolabs/installer"
     },
     {
-      "description": "Keep devcontainer image on the v2.x series (avoid false 4.x tag)",
-      "matchManagers": ["devcontainer"],
-      "matchPackageNames": ["oci.trueforge.org/tccr/devcontainer"],
-      "allowedVersions": "/^v2\\./"
+      "description": "Keep CloudNativePG individual images on the correct minimal-trixie series",
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "separateMajorMinor": true,
+      "major": {
+        "enabled": false
+      }
     }
   ]
 }
