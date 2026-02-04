@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://schema.301401.xyz/postgresql.cnpg.io/clusterimagecatalog_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ClusterImageCatalog
+metadata:
+  name: postgresql-minimal-trixie
+  labels:
+    images.cnpg.io/family: postgresql
+    images.cnpg.io/type: minimal
+    images.cnpg.io/os: trixie
+    images.cnpg.io/publisher: cnpg.io
+spec:
+  images:
+    - major: 18
+      image: ghcr.io/cloudnative-pg/postgresql:18.1-minimal-trixie@sha256:89937bcce0603963fc7f8c2c81a890dab6712494ee72de3723ffdd4903b2666e
+    - major: 17
+      image: ghcr.io/cloudnative-pg/postgresql:17.7-minimal-trixie@sha256:582ef38f1784c707717bf5a886061f62fce52b99190b9b16e81415e0757471b6
+    - major: 16
+      image: ghcr.io/cloudnative-pg/postgresql:16.11-minimal-trixie@sha256:2fede134804cc58464a2d556c5933e42623bd37a9bfdd93ffdcd4a286514da0c
