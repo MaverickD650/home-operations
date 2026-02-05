@@ -8,8 +8,8 @@
 
 - [ ] HelmRelease
 - [ ] Kustomization
-- [ ] Secrets (SOPS)
-- [ ] Cluster Bootstrap / Repos
+- [ ] Secrets (External Secrets, SOPS)
+- [ ] Cluster Bootstrap
 - [ ] Ingress
 - [ ] Monitoring
 - [ ] VolSync / Backups
@@ -20,14 +20,14 @@
 
 ## ✅ Checklist
 
-- [ ] Secrets encrypted with SOPS and committed as encrypted only
+- [ ] Secrets encrypted with SOPS or specified as External Secrets
 - [ ] No plaintext secrets committed
 - [ ] Base domain, hostnames, and URLs are templated correctly
 - [ ] Certifcate issuer set correctly
-- [ ] Required Helm repositories are defined in `./repositories/helm`
+- [ ] Required OCI repositories set with correct version and image
 - [ ] Integrations set correctly
 - [ ] Chart versions are correct vs upstream
-- [ ] Ingress annotations and rules are correct
+- [ ] Gateway API routes and policies set correctly
 - [ ] Volsync setup correctly
 - [ ] Kustomizations reference correct chart and path
 - [ ] CI workflows (if applicable) run successfully
