@@ -90,6 +90,14 @@ spec:
                 subPath: config
               - path: /data
                 subPath: data
+      config:
+        type: configMap
+        name: publish-k8s-schemas
+        advancedMounts:
+          publish-k8s-schemas:
+            generate-schemas:
+              - path: /config/map
+                readOnly: true
     serviceAccount:
       publish-k8s-schemas: {}
     rbac:
