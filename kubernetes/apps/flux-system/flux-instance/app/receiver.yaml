@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://schema.301401.xyz/notification.toolkit.fluxcd.io/receiver_v1.json
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/receiver_v1.json
 apiVersion: notification.toolkit.fluxcd.io/v1
 kind: Receiver
 metadata:

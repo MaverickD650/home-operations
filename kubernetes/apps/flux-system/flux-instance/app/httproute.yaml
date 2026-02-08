@@ -1,12 +1,9 @@
 ---
-# yaml-language-server: $schema=https://schema.301401.xyz/gateway.networking.k8s.io/httproute_v1.json
+# yaml-language-server: $schema=https://schema.maverickd650.dev/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: github-webhook
-  annotations:
-    gatus.home-operations.com/endpoint: |-
-      conditions: ["[STATUS] == 403"]
 spec:
   hostnames: ["flux-webhook.${SECRET_DOMAIN}"]
   parentRefs:
@@ -23,15 +20,11 @@ spec:
             type: PathPrefix
             value: /hook/
 ---
-# yaml-language-server: $schema=https://schema.301401.xyz/gateway.networking.k8s.io/httproute_v1.json
+# yaml-language-server: $schema=https://schema.maverickd650.dev/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: flux-dashboard
-  annotations:
-    gatus.home-operations.com/endpoint: |
-      client:
-        dns-resolver: tcp://${UNIFI_HOST}:53
 spec:
   parentRefs:
     - name: envoy-internal
