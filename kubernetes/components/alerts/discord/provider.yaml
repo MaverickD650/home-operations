@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://schema.301401.xyz/notification.toolkit.fluxcd.io/provider_v1beta3.json
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/provider_v1beta3.json
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
 kind: Provider
 metadata:
