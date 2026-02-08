@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://schema.301401.xyz/source.toolkit.fluxcd.io/ocirepository_v1.json
+# yaml-language-server: $schema=https://schema.maverickd650.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
