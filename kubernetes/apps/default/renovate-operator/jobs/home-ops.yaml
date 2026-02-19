@@ -106,12 +106,12 @@ spec:
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: docs
+  name: other-repositories
   namespace: default
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  discoveryFilter: maverickd650/cluster-docs
+  discoveryFilter: maverickd650/cluster-docs, maverickd650/feedcord
   extraEnv:
     - name: LOG_LEVEL
       value: debug
