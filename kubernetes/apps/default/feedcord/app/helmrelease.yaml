@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/maverickd650/feedcord
-              tag: master-13b4e16@sha256:a956c241bf9876b7070c66368048171417e37ea324fd86db25abef0d23996e4f
+              tag: 4.0.1@sha256:a7e266173418c9a8035008df9ab4bc023fb49493d77af282716f01d0eb47dbd4
             env:
               TZ: Europe/London
             envFrom:
