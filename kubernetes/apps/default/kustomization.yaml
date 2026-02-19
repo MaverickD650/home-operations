@@ -10,6 +10,7 @@ components:
 resources:
   - ./namespace.yaml
   - ./echo/ks.yaml
+  - ./feedcord/ks.yaml
   - ./freshrss/ks.yaml
   - ./homepage/ks.yaml
   - ./linkwarden/ks.yaml

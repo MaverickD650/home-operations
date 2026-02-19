@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: feedcord-config
+spec:
+  interval: 1h
+  url: https://github.com/MaverickD650/feedcord-config
+  ref:
+    branch: main
+  secretRef:
+    name: github-app-auth-fd
+  provider: github
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: feedcord-config-repo
+spec:
+  interval: 1h
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: feedcord-config
+  path: ./
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/external-secrets.io/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: github-app-auth-fd
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: github-app-auth-fd
+  data:
+    - secretKey: githubAppID
+      remoteRef:
+        key: GITHUB_APP_ID
+    - secretKey: githubAppInstallationID
+      remoteRef:
+        key: GITHUB_APP_INSTALLATION_ID
+    - secretKey: githubAppPrivateKey
+      remoteRef:
+        key: MAVBOT_PEM
