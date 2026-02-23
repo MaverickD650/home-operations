@@ -66,5 +66,5 @@ spec:
         type: configMap
         name: feedcord-config-main
         globalMounts:
-          - subPath: appsettings.json
-            path: /app/config/appsettings.json
+          - subPath: appsettings.yaml
+            path: /app/config/appsettings.yaml
