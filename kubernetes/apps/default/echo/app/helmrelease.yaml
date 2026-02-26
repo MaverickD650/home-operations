@@ -9,14 +9,6 @@ spec:
     kind: OCIRepository
     name: echo
   interval: 1h
-  install:
-    serverSideApply: true
-  upgrade:
-    serverSideApply: enabled
-  rollback:
-    serverSideApply: enabled
-  waitStrategy:
-    name: poller
   values:
     controllers:
       echo:
