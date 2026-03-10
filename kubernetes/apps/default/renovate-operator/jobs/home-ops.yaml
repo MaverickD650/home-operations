@@ -55,6 +55,8 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
+  provider:
+    name: github
   discoveryFilter: maverickd650/home-operations
   extraEnv:
     - name: RENOVATE_CONFIG_FILE
@@ -111,6 +113,8 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
+  provider:
+    name: github
   discoveryFilter: maverickd650/cluster-docs, maverickd650/feedcord
   extraEnv:
     - name: LOG_LEVEL
