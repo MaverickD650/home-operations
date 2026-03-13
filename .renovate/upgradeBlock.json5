@@ -21,6 +21,13 @@
       "dependencyDashboardApproval": true,
       "matchPackageNames": ["ghcr.io/siderolabs/kubelet", "ghcr.io/siderolabs/installer"],
       "labels": ["type/major", "system-upgrade"]
-    }
+    },
+    {
+      "description": ["Block automerge for Headlamp"],
+      "matchUpdateTypes": ["patch"],
+      "dependencyDashboardApproval": true,
+      "matchPackageNames": ["ghcr.io/home-operations/charts-mirror/headlamp"],
+      "labels": ["type/patch"]
+    },
   ]
 }
