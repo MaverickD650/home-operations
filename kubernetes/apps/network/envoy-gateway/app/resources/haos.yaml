@@ -24,6 +24,8 @@ ports:
 endpoints:
   - addresses:
       - "${HAOSIP}"
+    conditions:
+      ready: true
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
