@@ -8,4 +8,5 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./podmonitor.yaml
+  - ./resources/haos.yaml
   - ./resources/truenas.yaml
