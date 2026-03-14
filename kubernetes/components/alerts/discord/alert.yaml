@@ -15,7 +15,7 @@ spec:
     - kind: Kustomization
       name: "*"
   exclusionList:
-    - "^DependencyNotReady$"
+    - "^Dependencies do not meet ready condition, retrying in [0-9]+s$"
 ---
 # yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/alert_v1beta3.json
 apiVersion: notification.toolkit.fluxcd.io/v1beta3
