@@ -19,27 +19,21 @@
     ':semanticCommits',
     ':timezone(Europe/London)',
   ],
-  gitAuthor: 'mav-bot[bot] <185648356+mav-bot[bot]@users.noreply.github.com>',
-  rebaseWhen: 'conflicted',
-  prHourlyLimit: 0,
   dependencyDashboardTitle: 'Renovate Dashboard 🤖',
   suppressNotifications: [
     'prEditedNotification',
     'prIgnoreNotification',
   ],
+  ignorePaths: [
+    "**/resources/**",
+  ],
   flux: {
-    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$/"],
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
   },
-  helmfile: {
-    managerFilePatterns: [
-      "/(^|/)helmfile\\.ya?ml(?:\\.gotmpl)?(?:\\.j2)?$/",
-      "/(^|/)helmfile\\.d/.+\\.ya?ml(?:\\.gotmpl)?(?:\\.j2)?$/",
-    ],
+  "helm-values": {
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
   },
   kubernetes: {
-    managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml(?:\\.j2)?$/"],
+    managerFilePatterns: ["/\\.yaml(?:\\.j2)?$/"],
   },
-  kustomize: {
-    managerFilePatterns: ["/^kustomization\\.ya?ml(?:\\.j2)?$/"],
-  }
 }
