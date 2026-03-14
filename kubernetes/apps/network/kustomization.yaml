@@ -13,5 +13,5 @@ resources:
   - ./envoy-gateway/ks.yaml
   - ./haos-external/ks.yaml
   - ./k8s-gateway/ks.yaml
-  - ./truenas-external/ks.yaml
+  # - ./truenas-external/ks.yaml
   - ./unifi-dns/ks.yaml

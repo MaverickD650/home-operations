@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: truenas
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 81
+      targetPort: 81
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: truenas
+  labels:
+    kubernetes.io/service-name: truenas
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 81
+endpoints:
+  - addresses:
+      - "${truenasip}"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: truenas
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: &host storage.${SECRET_DOMAIN}
+spec:
+  hostnames:
+    - *host
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: truenas
+          namespace: network
+          port: 81
