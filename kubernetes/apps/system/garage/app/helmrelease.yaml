@@ -81,8 +81,8 @@ spec:
         globalMounts:
           - path: /data
       meta:
-        type: nfs
-        server: 192.168.50.118
-        path: /mnt/media/garage/meta
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 10Gi
         globalMounts:
           - path: /meta
