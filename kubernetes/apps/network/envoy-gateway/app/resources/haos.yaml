@@ -6,7 +6,7 @@ metadata:
 spec:
   ports:
     - name: http
-      protocol: HTTP
+      protocol: TCP
       port: 8123
       targetPort: 8123
 ---
@@ -19,7 +19,7 @@ metadata:
 addressType: IPv4
 ports:
   - name: http
-    protocol: HTTP
+    protocol: TCP
     port: 8123
 endpoints:
   - addresses:
