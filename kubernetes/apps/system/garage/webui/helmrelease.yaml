@@ -54,11 +54,11 @@ spec:
             port: &port 3909
     route:
       app:
-        hostnames: ["garage.${SECRET_DOMAIN}"]
+        hostnames:
+          - "garage.${SECRET_DOMAIN}"
         parentRefs:
-          - name: internal
+          - name: envoy-internal
             namespace: network
-            sectionName: https
         rules:
           - backendRefs:
               - name: *app
