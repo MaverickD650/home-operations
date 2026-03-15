@@ -33,11 +33,10 @@ kind: HTTPRoute
 metadata:
   name: garage
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: s3.${SECRET_DOMAIN},asset.s3.${SECRET_DOMAIN}
+    external-dns.alpha.kubernetes.io/hostname: &host s3.${SECRET_DOMAIN}
 spec:
   hostnames:
-    - s3.${SECRET_DOMAIN}
-    - asset.s3.${SECRET_DOMAIN}
+    - *host
   parentRefs:
     - name: envoy-internal
       namespace: network
