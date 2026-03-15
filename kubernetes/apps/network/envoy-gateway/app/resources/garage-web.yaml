@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: garage-web
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 30186
+      targetPort: 30186
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: garage-web
+  labels:
+    kubernetes.io/service-name: garage-web
+addressType: IPv4
+ports:
+  - name: http
+    protocol: TCP
+    port: 30186
+endpoints:
+  - addresses:
+      - "${truenasip}"
+    conditions:
+      ready: true
+      serving: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: garage-web
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: &host garage.${SECRET_DOMAIN}
+spec:
+  hostnames:
+    - *host
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: garage-web
+          namespace: network
+          port: 30186

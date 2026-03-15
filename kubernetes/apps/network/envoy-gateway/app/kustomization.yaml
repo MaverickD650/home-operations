@@ -8,5 +8,7 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./podmonitor.yaml
+  - ./resources/garage-web.yaml
+  - ./resources/garage.yaml
   - ./resources/haos.yaml
   - ./resources/truenas.yaml
