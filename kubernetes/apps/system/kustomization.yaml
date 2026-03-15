@@ -11,6 +11,6 @@ resources:
   - ./namespace.yaml
   - ./cloudnative-pg/ks.yaml
   - ./dragonfly/ks.yaml
-  - ./garage/ks.yaml
+  # - ./garage/ks.yaml
   - ./tuppr/ks.yaml
   - ./volsync/ks.yaml
