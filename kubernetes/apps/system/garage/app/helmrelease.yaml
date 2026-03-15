@@ -55,11 +55,11 @@ spec:
             port: 3903
     route:
       app:
-        hostnames: ["s3.${SECRET_DOMAIN}"]
+        hostnames:
+          - "s3.${SECRET_DOMAIN}"
         parentRefs:
-          - name: internal
+          - name: envoy-internal
             namespace: network
-            sectionName: https
         rules:
           - backendRefs:
               - name: *app
