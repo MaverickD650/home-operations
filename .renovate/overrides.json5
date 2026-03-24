@@ -24,6 +24,7 @@
     {
       "description": "Ignore duff Rancher shell image",
       "matchPackageNames": ["docker.io/rancher/shell"],
+      "matchDatasources": ["docker"],
       "ignoreVersions": ["v7.0.0"]
     }
   ]
