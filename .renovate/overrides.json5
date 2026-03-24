@@ -20,6 +20,11 @@
       "major": {
         "enabled": false
       }
+    },
+    {
+      "description": "Ignore duff Rancher shell image",
+      "matchPackageNames": ["docker.io/rancher/shell"],
+      "ignoreVersions": ["7"]
     }
   ]
 }
