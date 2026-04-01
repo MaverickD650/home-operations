@@ -40,6 +40,7 @@ jobs:
   flux-test:
     name: Flux Local - Test
     runs-on: ubuntu-latest
+    environment: bot
     permissions:
       contents: read
     steps:
@@ -79,6 +80,7 @@ jobs:
   flux-diff:
     name: Flux Diff
     runs-on: ubuntu-latest
+    environment: bot
     permissions:
       contents: read
       pull-requests: write
@@ -170,6 +172,7 @@ jobs:
       contents: write
     name: Automerge and Approve build
     runs-on: ubuntu-latest
+    environment: bot
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
