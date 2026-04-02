@@ -57,7 +57,8 @@ metadata:
 spec:
   provider:
     name: github
-  discoveryFilters: maverickd650/home-operations
+  discoveryFilters: 
+    - "maverickd650/home-operations"
   extraEnv:
     - name: RENOVATE_CONFIG_FILE
       value: /config/config.js
@@ -115,7 +116,9 @@ metadata:
 spec:
   provider:
     name: github
-  discoveryFilters: maverickd650/cluster-docs, maverickd650/feedcord
+  discoveryFilters: 
+    - "maverickd650/cluster-docs"
+    - "maverickd650/feedcord"
   extraEnv:
     - name: LOG_LEVEL
       value: debug
