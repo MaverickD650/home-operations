@@ -66,14 +66,8 @@ spec:
       value: "true"
     - name: RENOVATE_REPOSITORY_CACHE
       value: "enabled"
-    - name: LOG_LEVEL
-      value: debug
     - name: RENOVATE_ALLOWED_COMMANDS
       value: '["pnpm run bundle"]'
-    - name: RENOVATE_ENDPOINT
-      value: https://api.github.com/
-    - name: RENOVATE_PLATFORM_COMMIT
-      value: "true"
     - name: RENOVATE_ALLOW_PLUGINS
       value: "true"
     - name: RENOVATE_REDIS_URL
@@ -120,14 +114,8 @@ spec:
     - "maverickd650/cluster-docs"
     - "maverickd650/feedcord"
   extraEnv:
-    - name: LOG_LEVEL
-      value: debug
     - name: RENOVATE_ALLOWED_COMMANDS
       value: '["pnpm run bundle"]'
-    - name: RENOVATE_ENDPOINT
-      value: https://api.github.com/
-    - name: RENOVATE_PLATFORM_COMMIT
-      value: "true"
     - name: RENOVATE_ALLOW_PLUGINS
       value: "true"
     - name: RENOVATE_REDIS_URL
