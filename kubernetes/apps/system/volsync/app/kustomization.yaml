@@ -6,6 +6,6 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./prometheusrule.yaml
-  # - ./resourceset-backups.yaml
-  # - ./resourceset-input.yaml
-  # - ./resourceset-pvcs.yaml
+  - ./resourceset-backups.yaml
+  - ./resourceset-input.yaml
+  - ./resourceset-pvcs.yaml
