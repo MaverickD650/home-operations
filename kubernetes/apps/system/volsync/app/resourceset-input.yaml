@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/fluxcd.controlplane.io/resourcesetinputprovider_v1.json
+# Consolidated ResourceSetInputProvider for all VolSync backup/restore configurations
+# Referenced by volsync-backups and volsync-pvcs ResourceSets in kube-system namespace
+# All 21 apps are defined in a single nested array for easier management
+# Fields with defaults (can be omitted if value matches):
+#   - pvcSuffix: "config" (PVC name will be <app>-<pvcSuffix>)
+#   - runAsUser: "1001"
+#   - capacity: "1Gi"
+#   - schedule: "0 7 * * *"
+# To add a new app: add entry to the apps array below
+# To remove an app: delete entry from the apps array below
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: volsync-apps
+  namespace: kube-system
+  labels:
+    volsync.backube/managed-by: resourceset
+spec:
+  type: Static
+  defaultValues:
+    defaults:
+      runAsUser: "568"
+      capacity: "100Gi"
+      schedule: "0 7 * * *"
+      pvcSuffix: "config"
+      unlock: '20260405200806'
+    apps:
+      - app: homepage-temp
