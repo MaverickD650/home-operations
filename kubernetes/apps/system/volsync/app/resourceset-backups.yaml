@@ -85,5 +85,4 @@ spec:
           hourly: 24
           daily: 10
           weekly: 4
-        unlock: << get $app "unlock" | default inputs.defaults.unlock >>
     <<- end >>
