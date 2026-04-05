@@ -75,7 +75,6 @@ spec:
         copyMethod: Snapshot
         cacheCapacity: 10Gi
         pruneIntervalDays: 7
-        compression: zstd-fastest
         accessModes: ["ReadWriteOnce"]
         moverSecurityContext:
           runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
