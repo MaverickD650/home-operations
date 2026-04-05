@@ -1,0 +1,82 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/fluxcd.controlplane.io/resourceset_v1.json
+# ResourceSet for migrated PVCs with bootstrap capability
+# Creates PVCs with dataSourceRef for automatic restore during cluster bootstrap
+# App definitions are shared via the volsync-apps ResourceSetInputProvider
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: volsync-pvcs
+  namespace: kube-system
+spec:
+  # Dependencies - wait for volsync-backups ResourceSet and CRDs
+  dependsOn:
+    # Wait for the backups ResourceSet (creates ExternalSecrets referenced by ReplicationDestination)
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSet
+      name: volsync-backups
+      namespace: kube-system
+      ready: true
+    # Wait for VolSync CRDs
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: replicationdestinations.volsync.backube
+      ready: true
+  
+  # Health checks - wait for generated resources to be ready
+  wait: true
+  
+  # Reference the consolidated InputProvider with all app configurations
+  # To add a new app: add entry to the apps array in resourceset-inputprovider.yaml
+  # To remove an app: delete entry from the apps array in resourceset-inputprovider.yaml
+  inputsFrom:
+    - name: volsync-apps
+
+  # Loop through all apps and create both ReplicationDestination and PVC
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
+    # ReplicationDestination for bootstrap restore
+    apiVersion: volsync.backube/v1alpha1
+    kind: ReplicationDestination
+    metadata:
+      name: << $app.app >>-bootstrap
+      namespace: << get $app "namespace" | default "default" >>
+      labels:
+        kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    spec:
+      trigger:
+        manual: restore-once
+      restic:
+        repository: << $app.app >>-restic-secret
+        copyMethod: Snapshot
+        accessModes: [ReadWriteOnce]
+        capacity: << get $app "capacity" | default inputs.defaults.capacity >>
+        <<- if get $app "cacheCapacity" >>
+        cacheCapacity: << get $app "cacheCapacity" >>
+        <<- end >>
+        moverSecurityContext:
+          runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+        cleanupTempPVC: false
+        cleanupCachePVC: false
+    ---
+    # PVC with conditional dataSourceRef for automatic bootstrap
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
+      namespace: << get $app "namespace" | default "default" >>
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      dataSourceRef:
+        apiGroup: volsync.backube
+        kind: ReplicationDestination
+        name: << $app.app >>-bootstrap
+      storageClassName: longhorn
+      resources:
+        requests:
+          storage: << get $app "capacity" | default inputs.defaults.capacity >>
+    <<- end >>

@@ -1,0 +1,90 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/fluxcd.controlplane.io/resourceset_v1.json
+# ResourceSet for VolSync backups
+# Automated backups to S3 with Garage for improved performance and deduplication
+# Backup window: daily at 7:00 AM (schedule configurable per-app in resourceset-inputprovider.yaml)
+# Generates 42 resources (21 ExternalSecrets + 21 ReplicationSources) across namespaces
+# App definitions are shared via the volsync-apps ResourceSetInputProvider
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: volsync-backups
+  namespace: kube-system
+spec:
+  # Dependencies - wait for CRDs to be ready
+  dependsOn:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: replicationsources.volsync.backube
+      ready: true
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: externalsecrets.external-secrets.io
+      ready: true
+
+  # Health checks - wait for generated resources to be ready
+  wait: true
+
+  # Reference the consolidated InputProvider with all app configurations
+  # To add a new app: add entry to the apps array in resourceset-inputprovider.yaml
+  # To remove an app: delete entry from the apps array in resourceset-inputprovider.yaml
+  inputsFrom:
+    - name: volsync-apps
+
+  resourcesTemplate: |
+    <<- range $app := inputs.apps >>
+    ---
+    # ExternalSecret for S3 repository credentials
+    apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: << $app.app >>-restic
+      namespace: << get $app "namespace" | default "default" >>
+    spec:
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: infisical
+      target:
+        name: << $app.app >>-restic-secret
+      data:
+        - secretKey: AWS_ACCESS_KEY_ID
+          remoteRef:
+            key: AWS_ACCESS_KEY_ID
+        - secretKey: AWS_SECRET_ACCESS_KEY
+          remoteRef:
+            key: AWS_SECRET_ACCESS_KEY
+        - secretKey: RESTIC_PASSWORD
+          remoteRef:
+            key: RESTIC_PASSWORD
+        - secretKey: RESTIC_REPOSITORY
+          remoteRef:
+            key: << $app.app >>-restic-repository
+    ---
+    # ReplicationSource for backup configuration
+    apiVersion: volsync.backube/v1alpha1
+    kind: ReplicationSource
+    metadata:
+      name: << $app.app >>
+      namespace: << get $app "namespace" | default "default" >>
+    spec:
+      sourcePVC: << printf "%s-%s" $app.app (get $app "pvcSuffix" | default inputs.defaults.pvcSuffix) >>
+      trigger:
+        schedule: "<< get $app "schedule" | default inputs.defaults.schedule >>"
+      restic:
+        repository: << $app.app >>-restic-secret
+        copyMethod: Snapshot
+        cacheCapacity: 10Gi
+        pruneIntervalDays: 7
+        compression: zstd-fastest
+        accessModes: ["ReadWriteOnce"]
+        moverSecurityContext:
+          runAsUser: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          runAsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroup: << get $app "runAsUser" | default inputs.defaults.runAsUser >>
+          fsGroupChangePolicy: "OnRootMismatch"
+        retain:
+          hourly: 24
+          daily: 10
+          weekly: 4
+        unlock: << get $app "unlock" | default inputs.defaults.unlock >>
+    <<- end >>
