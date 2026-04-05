@@ -9,7 +9,7 @@ apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
   name: volsync-backups
-  namespace: kube-system
+  namespace: system
 spec:
   # Dependencies - wait for CRDs to be ready
   dependsOn:

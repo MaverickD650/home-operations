@@ -14,7 +14,7 @@ apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSetInputProvider
 metadata:
   name: volsync-apps
-  namespace: kube-system
+  namespace: system
   labels:
     volsync.backube/managed-by: resourceset
 spec:
