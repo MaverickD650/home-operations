@@ -23,7 +23,7 @@ spec:
     defaults:
       runAsUser: "568"
       capacity: "100Gi"
-      schedule: "0 8 * * *"
+      schedule: "0 4 * * *"
       pvcSuffix: "config"
       unlock: "202604070455434"
     apps:
