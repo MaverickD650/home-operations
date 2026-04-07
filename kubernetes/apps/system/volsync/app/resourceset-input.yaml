@@ -25,5 +25,6 @@ spec:
       capacity: "100Gi"
       schedule: "0 7 * * *"
       pvcSuffix: "config"
+      unlock: "202604070455434"
     apps:
       - app: homepage-temp
