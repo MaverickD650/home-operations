@@ -27,7 +27,5 @@ spec:
       pvcSuffix: "config"
       unlock: "202604070455434"
     apps:
-      - app: homepage-temp
-
       - app: pocket-id
         namespace: security
