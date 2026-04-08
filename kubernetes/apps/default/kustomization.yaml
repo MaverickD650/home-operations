@@ -14,5 +14,4 @@ resources:
   - ./homepage/ks.yaml
   - ./linkwarden/ks.yaml
   - ./mealie/ks.yaml
-  - ./snippet-box/ks.yaml
   - ./renovate-operator/ks.yaml
