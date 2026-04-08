@@ -60,6 +60,12 @@ spec:
     txtOwnerId: main
     txtPrefix: k8s.main.
     domainFilters: ["${SECRET_DOMAIN}"]
+    resources:
+      requests:
+        cpu: 13m
+        memory: 250M
+      limits:
+        memory: 250M
     serviceMonitor:
       enabled: true
     podAnnotations:
