@@ -23,7 +23,7 @@ spec:
     keepHistory: false
   values:
     controllers:
-      main:
+      plex:
         replicas: 1
         strategy: RollingUpdate
         containers:
@@ -38,7 +38,7 @@ spec:
     service:
       app:
         type: LoadBalancer
-        controller: app
+        controller: plex
         annotations:
           lbipam.cill.io/ips: 192.168.20.3
         ports:
