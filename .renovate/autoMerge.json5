@@ -58,14 +58,14 @@
       "ignoreTests": true
     },
     {
-      description: "Auto-merge high-cadence packages weekly",
-      matchDatasources: ["docker"],
-      automerge: true,
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: [
+      "description": "Auto-merge high-cadence packages weekly",
+      "matchDatasources": ["docker"],
+      "automerge": true,
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": [
         "ghcr.io/renovatebot/renovate",
       ],
-      schedule: ["daily"],
+      "schedule": ["daily"],
     },
   ]
 }
