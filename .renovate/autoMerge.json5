@@ -65,7 +65,7 @@
       "matchPackageNames": [
         "ghcr.io/renovatebot/renovate",
       ],
-      "schedule": ["daily"],
+      "schedule": ["* 0-3 * * *"],
     },
   ]
 }
