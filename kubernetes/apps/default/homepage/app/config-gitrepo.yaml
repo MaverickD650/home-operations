@@ -24,7 +24,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: homepage-config
-  path: ./
+  path: ./resources
 ---
 # yaml-language-server: $schema=https://schema.maverickd650.dev/external-secrets.io/externalsecret_v1.json
 apiVersion: external-secrets.io/v1
