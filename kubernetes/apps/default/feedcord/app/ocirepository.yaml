@@ -12,3 +12,21 @@ spec:
   ref:
     tag: 4.6.2
   url: oci://ghcr.io/bjw-s-labs/helm/app-template
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: feedcord-config
+spec:
+  interval: 1h
+  ref:
+    tag: latest
+  url: oci://ghcr.io/maverickd650/feedcord-config
+  secretRef:
+    name: ghcr-feedcord
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: "^https://token.actions.githubusercontent.com$"
+        subject: "^https://github.com/MaverickD650/feedcord-config.*$"
