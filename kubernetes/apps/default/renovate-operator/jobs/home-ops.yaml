@@ -57,7 +57,7 @@ metadata:
 spec:
   provider:
     name: github
-  discoveryFilters: 
+  discoveryFilters:
     - "maverickd650/home-operations"
   extraEnv:
     - name: RENOVATE_CONFIG_FILE
@@ -112,9 +112,10 @@ metadata:
 spec:
   provider:
     name: github
-  discoveryFilters: 
+  discoveryFilters:
     - "maverickd650/cluster-docs"
     - "maverickd650/feedcord"
+    - "maverickd650/homepage-config"
   extraEnv:
     - name: RENOVATE_ALLOWED_COMMANDS
       value: '["pnpm run bundle"]'
