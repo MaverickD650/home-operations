@@ -29,4 +29,4 @@ spec:
     provider: cosign
     matchOIDCIdentity:
       - issuer: "^https://token.actions.githubusercontent.com$"
-        subject: "^https://github.com/maverickd650/homepage-config.*$"
+        subject: "^https://github.com/MaverickD650/homepage-config.*$"
