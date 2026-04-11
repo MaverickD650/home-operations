@@ -6,6 +6,21 @@ metadata:
   name: alerts-status
   namespace: system
 spec:
+  dependsOn:
+    # Wait for ExternalSecrets CRD and ClusterSecretStore to be ready before applying alerts
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: externalsecrets.external-secrets.io
+      ready: true
+    - apiVersion: external-secrets.io/v1
+      kind: ClusterSecretStore
+      name: infisical
+      namespace: security
+      ready: true
+
+  # Health checks - wait for generated resources to be ready
+  wait: true
+  
   inputs:
     - namespace: "cert-manager"
     - namespace: "flux-system"
