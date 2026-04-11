@@ -7,7 +7,8 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: publish-k8s-schemas
+    name: common
+    namespace: system
   interval: 30m
   values:
     controllers:

@@ -8,7 +8,8 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: feedcord
+    name: common
+    namespace: system
   install:
     remediation:
       retries: 3

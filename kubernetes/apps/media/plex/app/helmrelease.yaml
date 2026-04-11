@@ -7,7 +7,8 @@ metadata:
 spec:
   chartRef:
     kind: OCIRepository
-    name: plex
+    name: common
+    namespace: system
   interval: 1h
   timeout: 20m
   maxHistory: 3
