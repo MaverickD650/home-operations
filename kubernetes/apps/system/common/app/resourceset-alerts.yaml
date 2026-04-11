@@ -7,7 +7,7 @@ metadata:
   namespace: system
 spec:
   dependsOn:
-    # Wait for ExternalSecrets CRD and ClusterSecretStore to be ready before applying alerts
+    # Wait for ExternalSecrets CRD and ClusterSecretStore to be ready before applying alerts
     - apiVersion: apiextensions.k8s.io/v1
       kind: CustomResourceDefinition
       name: externalsecrets.external-secrets.io
