@@ -1,0 +1,79 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/fluxcd.controlplane.io/resourceset_v1.json
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: alerts
+  namespace: system
+spec:
+  inputs:
+    - namespace: "cert-manager"
+    - namespace: "default"
+    - namespace: "flux-system"
+    - namespace: "jobs"
+    - namespace: "kube-system"
+    - namespace: "longhorn"
+    - namespace: "media"
+    - namespace: "network"
+    - namespace: "observability"
+    - namespace: "security"
+    - namespace: "system"
+  resources:
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: discord-webhook
+        namespace: << inputs.namespace >>
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: infisical
+        target:
+          name: discord-webhook
+        data:
+          - secretKey: discord-webhook
+            remoteRef:
+              key: FLUX_ALERT_WEBHOOK
+    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+      kind: Provider
+      metadata:
+        name: discord
+        namespace: << inputs.namespace >>
+      spec:
+        type: discord
+        secretRef:
+          name: discord-webhook
+    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+      kind: Alert
+      metadata:
+        name: cluster-alerts
+        namespace: << inputs.namespace >>
+      spec:
+        summary: "Cluster Alert"
+        providerRef:
+          name: discord
+        eventSeverity: info
+        eventSources:
+          - kind: HelmRelease
+            name: '*'
+          - kind: Kustomization
+            name: '*'
+        exclusionList:
+          - "^Dependencies do not meet ready condition, retrying in [0-9]+s$"
+    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+      kind: Alert
+      metadata:
+        name: cluster-errors
+        namespace: << inputs.namespace >>
+      spec:
+        summary: "Cluster Error"
+        providerRef:
+          name: discord
+        eventSeverity: error
+        eventSources:
+          - kind: HelmRelease
+            name: '*'
+          - kind: Kustomization
+            name: '*'
+          - kind: OCIRepository
+            name: '*'

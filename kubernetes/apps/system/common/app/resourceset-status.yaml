@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/fluxcd.controlplane.io/resourceset_v1.json
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: alerts
+  namespace: system
+spec:
+  inputs:
+    - namespace: "cert-manager"
+    - namespace: "flux-system"
+    - namespace: "jobs"
+    - namespace: "kube-system"
+    - namespace: "longhorn"
+    - namespace: "media"
+    - namespace: "network"
+    - namespace: "observability"
+    - namespace: "security"
+    - namespace: "system"
+  resources:
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: github-status-token-secret
+        namespace: << inputs.namespace >>
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: infisical
+        target:
+          name: github-status-token-secret
+        data:
+          - secretKey: githubAppID
+            remoteRef:
+              key: GITHUB_APP_ID
+          - secretKey: githubAppInstallationID
+            remoteRef:
+              key: FLUX_APP_INSTALLATION_ID
+          - secretKey: githubAppPrivateKey
+            remoteRef:
+              key: MAVBOT_PEM
+    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+      kind: Provider
+      metadata:
+        name: github-status
+        namespace: << inputs.namespace >>
+      spec:
+        type: github
+        address: https://github.com/MaverickD650/home-operations
+        secretRef:
+          name: github-status-token-secret
+    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+      kind: Alert
+      metadata:
+        name: github-status
+        namespace: << inputs.namespace >>
+      spec:
+        providerRef:
+          name: github-status
+        eventSources:
+          - kind: Kustomization
+            name: '*'
