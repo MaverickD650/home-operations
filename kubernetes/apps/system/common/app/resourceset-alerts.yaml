@@ -87,6 +87,8 @@ spec:
           name: discord
         eventSeverity: error
         eventSources:
+          - kind: GitRepository
+            name: '*'
           - kind: HelmRelease
             name: '*'
           - kind: Kustomization
