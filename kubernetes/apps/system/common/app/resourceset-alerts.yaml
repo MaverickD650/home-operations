@@ -34,7 +34,7 @@ spec:
           - secretKey: discord-webhook
             remoteRef:
               key: FLUX_ALERT_WEBHOOK
-    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+    - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Provider
       metadata:
         name: discord
@@ -43,7 +43,7 @@ spec:
         type: discord
         secretRef:
           name: discord-webhook
-    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+    - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Alert
       metadata:
         name: cluster-alerts
@@ -60,7 +60,7 @@ spec:
             name: '*'
         exclusionList:
           - "^Dependencies do not meet ready condition, retrying in [0-9]+s$"
-    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+    - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Alert
       metadata:
         name: cluster-errors

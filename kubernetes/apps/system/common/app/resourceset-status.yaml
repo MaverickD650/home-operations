@@ -39,7 +39,7 @@ spec:
           - secretKey: githubAppPrivateKey
             remoteRef:
               key: MAVBOT_PEM
-    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+    - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Provider
       metadata:
         name: github-status
@@ -49,7 +49,7 @@ spec:
         address: https://github.com/MaverickD650/home-operations
         secretRef:
           name: github-status-token-secret
-    - apiVersion: notifications.toolkit.fluxcd.io/v1beta3
+    - apiVersion: notification.toolkit.fluxcd.io/v1beta3
       kind: Alert
       metadata:
         name: github-status
