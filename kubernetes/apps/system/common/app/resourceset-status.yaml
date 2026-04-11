@@ -35,7 +35,7 @@ spec:
               key: GITHUB_APP_ID
           - secretKey: githubAppInstallationID
             remoteRef:
-              key: FLUX_APP_INSTALLATION_ID
+              key: GITHUB_APP_INSTALLATION_ID
           - secretKey: githubAppPrivateKey
             remoteRef:
               key: MAVBOT_PEM
