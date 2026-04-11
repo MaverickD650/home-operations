@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/external-secrets.io/externalsecret_v1.json
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: github-status-token-secret
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: github-status-token-secret
+  data:
+    - secretKey: githubAppID
+      remoteRef:
+        key: GITHUB_APP_ID
+    - secretKey: githubAppInstallationID
+      remoteRef:
+        key: GITHUB_APP_INSTALLATION_ID
+    - secretKey: githubAppPrivateKey
+      remoteRef:
+        key: MAVBOT_PEM
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/provider_v1beta3.json
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: github-status
+  namespace: default
+spec:
+  type: github
+  address: https://github.com/MaverickD650/home-operations
+  secretRef:
+    name: github-status-token-secret
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/provider_v1beta3.json
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: github-status-homepage
+  namespace: default
+spec:
+  type: github
+  address: https://github.com/MaverickD650/homepage-config
+  secretRef:
+    name: github-status-token-secret
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/provider_v1beta3.json
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: github-status-feedcord
+  namespace: default
+spec:
+  type: github
+  address: https://github.com/MaverickD650/feedcord-config
+  secretRef:
+    name: github-status-token-secret
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/alert_v1beta3.json
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: github-status
+  namespace: default
+spec:
+  providerRef:
+    name: github-status
+  eventSources:
+    - kind: Kustomization
+      name: 'echo'
+    - kind: Kustomization
+      name: 'homepage'
+    - kind: Kustomization
+      name: 'feedcord'
+    - kind: Kustomization
+      name: 'linkwarden'
+    - kind: Kustomization
+      name: 'mealie'
+    - kind: Kustomization
+      name: 'renovate-operator'
+    - kind: Kustomization
+      name: 'renovate-operator-jobs'
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/alert_v1beta3.json
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: github-status-homepage
+  namespace: default
+spec:
+  providerRef:
+    name: github-status-homepage
+  eventSources:
+    - kind: Kustomization
+      name: 'homepage-config'
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/notification.toolkit.fluxcd.io/alert_v1beta3.json
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: github-status-feedcord
+  namespace: default
+spec:
+  providerRef:
+    name: github-status-feedcord
+  eventSources:
+    - kind: Kustomization
+      name: 'feedcord-config'
