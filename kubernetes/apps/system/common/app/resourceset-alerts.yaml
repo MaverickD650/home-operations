@@ -46,7 +46,7 @@ spec:
         target:
           name: discord-webhook
         data:
-          - secretKey: discord-webhook
+          - secretKey: address
             remoteRef:
               key: FLUX_ALERT_WEBHOOK
     - apiVersion: notification.toolkit.fluxcd.io/v1beta3
