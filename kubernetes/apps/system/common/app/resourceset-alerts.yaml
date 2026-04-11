@@ -64,7 +64,6 @@ spec:
         name: cluster-alerts
         namespace: << inputs.namespace >>
       spec:
-        summary: "Cluster Alert"
         providerRef:
           name: discord
         eventSeverity: info
@@ -73,6 +72,8 @@ spec:
             name: '*'
           - kind: Kustomization
             name: '*'
+        eventMetadata:
+          summary: "Cluster Alert"
         exclusionList:
           - "^Dependencies do not meet ready condition, retrying in [0-9]+s$"
     - apiVersion: notification.toolkit.fluxcd.io/v1beta3
