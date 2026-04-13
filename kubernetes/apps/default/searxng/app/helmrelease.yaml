@@ -1,0 +1,159 @@
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: searxng
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: common
+    namespace: system
+  interval: 1h
+  timeout: 20m
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+    controllers:
+      searxng:
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: &uid 568
+            runAsGroup: *uid
+            fsGroup: *uid
+            fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: { type: RuntimeDefault }
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/searxng/searxng
+              tag: 2026.4.13-ee66b070a@sha256:4c6b4f3e1fc10a907a40b7eaaf5b92d50f5b4097d6fb5b02041c0f9926233b36
+            env:
+              SEARXNG_BASE_URL: &url https://search.${SECRET_DOMAIN}
+              SEARXNG_URL: *url
+              SEARXNG_PORT: &port 8080
+              SEARXNG_VALKEY_URL: redis://dragonfly-searxng.system.cluster.local:6379
+              UWSGI_THREADS:
+                valueFrom:
+                  resourceFieldRef:
+                    containerName: main
+                    resource: limits.cpu
+              UWSGI_WORKERS: 1
+            envFrom:
+              - secretRef:
+                  name: searxng
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  initialDelaySeconds: 1
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 2
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+                memory: 1Gi
+              limits:
+                memory: 3Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      main:
+        controller: searxng
+        ports:
+          http:
+            port: *port
+    route:
+      main:
+        hostnames:
+          - search.${SECRET_DOMAIN}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+            - identifier: main
+              port: *port
+    persistence:
+      config:
+        type: configMap
+        name: searxng
+        globalMounts:
+          - path: /etc/searxng/settings.yml
+            subPath: settings.yml
+      tmp:
+        type: emptyDir
+    configMaps:
+      config:
+        data:
+          settings.yml: |
+            use_default_settings: true
+
+            server:
+              public_instance: false
+              limiter: true
+              image_proxy: true
+              method: GET # https://github.com/searxng/searxng/pull/3619
+
+            outgoing:
+              request_timeout: 1.0
+
+            search:
+              autocomplete: google
+              favicon_resolver: duckduckgo
+              languages:
+                - en
+                - en-US
+              formats:
+                - html
+                - json
+
+            ui:
+              static_use_hash: true
+              default_theme: simple
+              theme_args:
+                simple_style: dark
+              infinite_scroll: true
+              results_on_new_tab: false
+
+            enabled_plugins:
+              - Basic Calculator
+              - Hash plugin
+              - Hostnames plugin
+              - Open Access DOI rewrite
+              - Self Informations
+              - Tracker URL remover
+              - Unit converter plugin
+
+            hostnames:
+              high_priority:
+                - (.*)\/blog\/(.*)
+                - (.*\.)?wikipedia.org$
+                - (.*\.)?github.com$
+                - (.*\.)?reddit.com$
+                - (.*\.)?docker.com$
+                - (.*\.)?archlinux.org$
+                - (.*\.)?stackoverflow.com$
+                - (.*\.)?askubuntu.com$
+                - (.*\.)?superuser.com$
