@@ -28,7 +28,7 @@ spec:
         pod:
           securityContext:
             runAsNonRoot: true
-            runAsUser: &uid 568
+            runAsUser: &uid 977
             runAsGroup: *uid
             fsGroup: *uid
             fsGroupChangePolicy: OnRootMismatch
