@@ -23,17 +23,6 @@ spec:
   usages:
     - cert sign
     - crl sign
-  nameConstraints:
-    critical: true
-    permitted:
-      dnsDomains: &domains
-        - .svc.cluster.local
-        - .cluster.local
-        - .svc
-        - postgres-rw
-        - postgres-ro
-        - postgres-r
-      uriDomains: *domains
   duration: 87660h
   privateKey:
     algorithm: ECDSA
