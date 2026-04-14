@@ -43,3 +43,31 @@ metadata:
 spec:
   ca:
     secretName: cluster-ca-cert
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-ca
+spec:
+  isCA: true
+  commonName: postgres-ca
+  subject:
+    countries:
+      - UK
+    organizations:
+      - homeops-cluster
+  usages:
+    - cert sign
+    - crl sign
+  duration: 87660h
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    encoding: PKCS8
+    rotationPolicy: Never
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer
+    group: cert-manager.io
+  secretName: postgres-ca-cert
