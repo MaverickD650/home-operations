@@ -14,3 +14,19 @@ spec:
       key: "ca.crt"
     secret:
       key: "ca.crt"
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/trust.cert-manager.io/bundle_v1alpha1.json
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: postgres-ca
+spec:
+  sources:
+    - secret:
+        name: "postgres-ca-cert"
+        key: "tls.crt"
+  target:
+    configMap:
+      key: "ca.crt"
+    secret:
+      key: "ca.crt"
