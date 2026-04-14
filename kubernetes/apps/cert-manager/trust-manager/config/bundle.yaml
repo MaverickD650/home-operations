@@ -26,6 +26,9 @@ spec:
         name: "postgres-ca-cert"
         key: "tls.crt"
   target:
+    namespaceSelector:
+      matchLabels:
+        cnpg: "true"
     configMap:
       key: "ca.crt"
     secret:
