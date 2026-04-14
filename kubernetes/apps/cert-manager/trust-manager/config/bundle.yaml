@@ -11,6 +11,7 @@ spec:
         key: "tls.crt"
   target:
     configMap:
+      name: root-ca
       key: "ca.crt"
     secret:
       key: "ca.crt"
@@ -19,7 +20,7 @@ spec:
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: postgres-ca
+  name: cnpg-ca
 spec:
   sources:
     - secret:
