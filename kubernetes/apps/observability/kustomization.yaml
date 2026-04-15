@@ -13,4 +13,4 @@ resources:
   - ./kube-prometheus-stack/ks.yaml
   - ./headlamp/ks.yaml
   - ./unpoller/ks.yaml
-  # - ./victoria-logs/ks.yaml
+  - ./victoria-logs/ks.yaml
