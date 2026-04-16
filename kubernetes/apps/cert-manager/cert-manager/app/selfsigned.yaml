@@ -19,7 +19,7 @@ spec:
     countries:
       - UK
     organizations:
-      - homeops-cluster
+      - maverickd650
   usages:
     - cert sign
     - crl sign
@@ -48,15 +48,15 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: postgres-ca
+  name: postgres-server-ca
 spec:
   isCA: true
-  commonName: postgres-ca
+  commonName: postgres-server-ca
   subject:
     countries:
       - UK
     organizations:
-      - homeops-cluster
+      - maverickd650
   usages:
     - cert sign
     - crl sign
@@ -70,13 +70,56 @@ spec:
     name: cluster-ca
     kind: ClusterIssuer
     group: cert-manager.io
-  secretName: postgres-ca-cert
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""
+  secretName: postgres-server-ca-cert
 ---
 # yaml-language-server: $schema=https://schema.maverickd650.dev/cert-manager.io/clusterissuer_v1.json
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: postgres-ca
+  name: postgres-server-ca
 spec:
   ca:
-    secretName: postgres-ca-cert
+    secretName: postgres-server-ca-cert
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-client-ca
+spec:
+  isCA: true
+  commonName: postgres-client-ca
+  subject:
+    countries:
+      - UK
+    organizations:
+      - maverickd650
+  usages:
+    - cert sign
+    - crl sign
+  duration: 87660h
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    encoding: PKCS8
+    rotationPolicy: Never
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer
+    group: cert-manager.io
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""
+  secretName: postgres-client-ca-cert
+---
+# yaml-language-server: $schema=https://schema.maverickd650.dev/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: postgres-client-ca
+spec:
+  ca:
+    secretName: postgres-client-ca-cert
