@@ -11,14 +11,9 @@ spec:
     name: longhorn
   interval: 1h
   install:
-    createNamespace: true
     crds: CreateReplace
-    remediation:
-      retries: 3
   upgrade:
     crds: CreateReplace
-    remediation:
-      retries: 3
   values:
     defaultSettings:
       # Increase to 3 for a multi-node cluster

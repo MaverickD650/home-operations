@@ -9,13 +9,8 @@ spec:
   chartRef:
     kind: OCIRepository
     name: dragonfly-operator
-  install:
-    remediation:
-      retries: 3
   upgrade:
     cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     grafanaDashboard:
       enabled: true

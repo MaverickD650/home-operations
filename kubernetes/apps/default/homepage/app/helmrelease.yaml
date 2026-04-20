@@ -10,13 +10,8 @@ spec:
     kind: OCIRepository
     name: common
     namespace: system
-  install:
-    remediation:
-      retries: 3
   upgrade:
     cleanupOnFail: true
-    remediation:
-      retries: 3
   values:
     controllers:
       main:

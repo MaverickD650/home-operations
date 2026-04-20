@@ -9,13 +9,6 @@ spec:
     kind: OCIRepository
     name: volsync
   interval: 1h
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
-  upgrade:
-    remediation:
-      retries: 3
   values:
     workload:
       main:

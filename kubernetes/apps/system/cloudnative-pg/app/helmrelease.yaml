@@ -10,14 +10,9 @@ spec:
     name: cloudnative-pg
   interval: 1h
   install:
-    createNamespace: true
     crds: CreateReplace
-    remediation:
-      retries: 3
   upgrade:
     crds: CreateReplace
-    remediation:
-      retries: 3
   values:
     crds:
       create: true

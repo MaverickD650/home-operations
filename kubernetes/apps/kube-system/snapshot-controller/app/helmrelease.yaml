@@ -9,14 +9,7 @@ spec:
     kind: OCIRepository
     name: snapshot-controller
   interval: 1h
-  install:
-    createNamespace: true
-    remediation:
-      retries: 3
   upgrade:
     cleanupOnFail: true
     crds: CreateReplace
-    remediation:
-      strategy: rollback
-      retries: 3
   values: {}
