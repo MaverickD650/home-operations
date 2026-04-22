@@ -13,5 +13,5 @@ resources:
   - ./paperless-ngx/ks.yaml
   - ./plex/ks.yaml
   - ./stash/ks.yaml
-  - ./stash-1/ks.yaml
+  # - ./stash-1/ks.yaml
   - ./stash2/ks.yaml
