@@ -31,3 +31,7 @@ spec:
         namespace: security
       - app: plex
         namespace: media
+      - app: stash-1
+        namespace: media
+      - app: stash-2
+        namespace: media
