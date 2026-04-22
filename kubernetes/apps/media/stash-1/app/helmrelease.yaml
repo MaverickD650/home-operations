@@ -31,7 +31,7 @@ spec:
               tag: 0.31.1@sha256:12c4ee1424a211888f4e4253ef70b95a639b3d5475ea3d85e88989754569537d
             env:
               STASH_STASH: /data
-              STASH_BLOBS_PATH: /blobs
+              STASH_BLOBS_PATH: /config/blobs
               STASH_BLOBS_STORAGE: FILESYSTEM
               STASH_GENERATED: /generated
               STASH_METADATA: /metadata
@@ -67,8 +67,6 @@ spec:
         globalMounts:
         - path: /config
           subPath: config
-        - path: /blobs
-          subPath: blobs
         - path: /generated
           subPath: generated
         - path: /metadata
