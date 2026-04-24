@@ -90,7 +90,7 @@ spec:
               subPath: tmp
     route:
       app:
-        hostnames: ["stash-2.${SECRET_DOMAIN}"]
+        hostnames: ["stash2.${SECRET_DOMAIN}"]
         parentRefs:
         - name: envoy-internal
           namespace: network

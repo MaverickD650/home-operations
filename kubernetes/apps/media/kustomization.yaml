@@ -14,4 +14,3 @@ resources:
   - ./plex/ks.yaml
   - ./stash-1/ks.yaml
   - ./stash-2/ks.yaml
-  - ./stash2/ks.yaml
