@@ -16,4 +16,4 @@ spec:
     provider: cosign
     matchOIDCIdentity:
       - issuer: ^https://token.actions.githubusercontent.com$
-        subject: ^https://github.com/fluent/helm-charts/fluent-bit.*$
+        subject: ^https://github\.com/action-stars/helm-workflows/\.github/workflows/release\.yaml@.+
