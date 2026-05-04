@@ -13,6 +13,8 @@ spec:
   upgrade:
     cleanupOnFail: true
   values:
+    defaultPodOptions:
+      automountServiceAccountToken: true
     controllers:
       main:
         replicas: 1
