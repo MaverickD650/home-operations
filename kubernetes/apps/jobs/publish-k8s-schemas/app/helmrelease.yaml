@@ -26,6 +26,7 @@ spec:
             runAsGroup: 568
             runAsNonRoot: true
             runAsUser: 568
+          automountServiceAccountToken: true
         initContainers:
           generate-schemas:
             image:
